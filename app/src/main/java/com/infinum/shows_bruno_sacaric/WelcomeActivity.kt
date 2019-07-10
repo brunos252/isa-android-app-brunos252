@@ -3,6 +3,7 @@ package com.infinum.shows_bruno_sacaric
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.google.android.material.textfield.TextInputEditText
 
 class WelcomeActivity : AppCompatActivity() {
 
