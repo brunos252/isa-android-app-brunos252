@@ -35,9 +35,9 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        usernameLayout.setEndIconOnClickListener {
-            usernameLayout.setEndIconActivated(false)
-            Log.d("listen", "i did")
+        passwordLayout.setEndIconOnClickListener {
+            //ne znam kako da ukljucim prikaz sifre
+            Log.d("EndIcon", "clicked")
         }
 
         var usrnmOK = false
@@ -53,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 usrnmOK = s.toString().isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()
+
                 if(usrnmOK && passOK){
                     logInButton.isEnabled = true
                     logInButton.background = getDrawable(R.drawable.button_rounded)
@@ -60,6 +61,7 @@ class LoginActivity : AppCompatActivity() {
                     logInButton.isEnabled = false
                     logInButton.background = getDrawable(R.drawable.button_rounded_inactive)
                 }
+
                 if(!usrnmOK && !s.isNullOrEmpty() ){
                     usernameLayout.error = "Invalid email"
                 } else{
@@ -83,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
                 } else{
                     counter--
                 }
+s
                 passOK = counter >= 8
                 if(usrnmOK && passOK){
                     logInButton.isEnabled = true
