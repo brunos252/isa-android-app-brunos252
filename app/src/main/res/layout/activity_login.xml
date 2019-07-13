@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_logo_mark"
+            android:id="@+id/logoImage"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:id="@+id/usernameLayout"
+            android:layout_marginTop="31dp"
+            android:fontFamily="@font/karla_bold"
+            app:layout_constraintTop_toBottomOf="@+id/logoImage" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="12dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:id="@+id/usernameText"
+                android:fontFamily="@font/karla_bold"
+
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:id="@+id/passwordLayout"
+            android:fontFamily="@font/karla_bold"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/colorAccent"
+            app:endIconDrawable="@drawable/ic_show_password"
+            app:layout_constraintTop_toBottomOf="@+id/usernameLayout"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:id="@+id/passwordText"
+                android:fontFamily="@font/karla_bold"
+        />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+            android:text="LOG IN"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/LoginButton"
+            android:background="@drawable/button_rounded_selector"
+            android:enabled="false"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:lineHeight="20sp"
+            android:letterSpacing="0.32"
+            android:lineSpacingExtra="4sp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="72dp"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
+            android:fontFamily="@font/karla_bold"
+            android:stateListAnimator="@null"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
