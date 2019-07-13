@@ -71,7 +71,6 @@
             android:enabled="false"
             android:textColor="#ffffff"
             android:textSize="16sp"
-            android:lineHeight="20sp"
             android:letterSpacing="0.32"
             android:lineSpacingExtra="4sp"
             android:gravity="center"

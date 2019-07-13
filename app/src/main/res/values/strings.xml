@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Shows-Bruno_Sacaric</string>
+    <string name="doctorWhoDesc">The Doctor, a Time Lord/Lady from the race whose home planet is Gallifrey,
+        travels through time and space in his/her ship the T.A.R.D.I.S.
+        (an acronym for Time and Relative Dimension In Space) with numerous companions. From time to time he/she
+        regenerates into a new form (which is how the series has been running since the departure of the original actor,
+        William Hartnell, in 1966).
+    </string>
+    <string name="theOfficeDesc">A mockumentary on a group of typical office workers, where the workday consists of
+        ego clashes, inappropriate behavior, and tedium.
+    </string>
+    <string name="breakingBadDesc">A high school chemistry teacher diagnosed with inoperable lung cancer turns
+        to manufacturing and selling methamphetamine in order to secure his family\'s future.
+    </string>
+    <string name="sherlockDesc">In this modernized version of the Conan Doyle characters, using his detective plots,
+        Sherlock Holmes lives in early 21st century London and acts more cocky towards Scotland Yard\'s detective
+        inspector Lestrade because he\'s actually less confident. Doctor Watson is now a fairly young veteran of the
+        Afghan war, less adoring and more active.
+    </string>
 </resources>

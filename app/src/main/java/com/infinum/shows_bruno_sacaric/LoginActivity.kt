@@ -15,7 +15,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         LoginButton.setOnClickListener {
-            startActivity(WelcomeActivity.newInstance(this, usernameText.text.toString()))
+            startActivity(ShowsActivity.newInstance(this))
         }
 
         var usrnmOK = false
