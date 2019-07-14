@@ -2,5 +2,5 @@ package com.infinum.shows_bruno_sacaric
 
 class Show(val id: Int, val imageid: Int,
            val name: String, val airDate: String,
-           val episodes: List<Episode> = arrayListOf<Episode>(),
+           var episodes: ArrayList<Episode> = arrayListOf(),
            val description: String = "No description available")

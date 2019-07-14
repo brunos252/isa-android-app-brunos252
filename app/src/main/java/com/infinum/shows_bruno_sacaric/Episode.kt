@@ -1,3 +1,3 @@
 package com.infinum.shows_bruno_sacaric
 
-class Episode
+class Episode(val name: String, val description: String)

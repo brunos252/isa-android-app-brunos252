@@ -30,8 +30,6 @@ class ShowsAdapter(private val listOfShows: ArrayList<Show>, private val clickLi
 
     inner class ShowViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-    //da se nesto dogada dok kliknemo
-    //ideja je da ga implementiramo u activityju i onda ga proslijedimo adapteru
     interface onShowClicked{
 
         fun onClick(index: Int)
