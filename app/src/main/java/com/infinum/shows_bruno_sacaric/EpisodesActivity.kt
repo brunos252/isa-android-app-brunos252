@@ -3,23 +3,23 @@ package com.infinum.shows_bruno_sacaric
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_episodes.*
-import kotlinx.android.synthetic.main.activity_shows.*
+import kotlinx.android.synthetic.main.toolbar.*
+
+private const val EPISODE_ADDED = 109
 
 class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
 
     companion object {
-        const val key = "SHOW"
+        const val SHOW_KEY = "SHOW"
 
         fun newInstance(context: Context, index: Int): Intent {
             val intent = Intent(context, EpisodesActivity::class.java)
-            intent.putExtra(key, index)
+            intent.putExtra(SHOW_KEY, index)
             return intent
         }
     }
@@ -28,12 +28,15 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_episodes)
 
-        val index = intent.getIntExtra(key, 1)
-
-        setSupportActionBar(toolbar as Toolbar?)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val index = intent.getIntExtra(SHOW_KEY, 1)
 
         val show = ShowsList.listOfShows[index]
+
+        toolbar.title = show.name
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener {
+            this.onBackPressed()
+        }
 
         if(show.episodes.isEmpty()){
             emptyView.visibility = View.VISIBLE
@@ -42,7 +45,6 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
         }
 
         showDesc.text = show.description
-        supportActionBar?.title = show.name
 
         floatingActionButton.setOnClickListener {
             onAddEpisode(floatingActionButton)
@@ -53,15 +55,6 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == android.R.id.home){
-            finish()
-            return true
-        } else{
-            return super.onOptionsItemSelected(item)
-        }
-    }
-
     //za pritisak na pojedinacnu epizodu
     override fun onClick(index: Int) {
     }
@@ -69,14 +62,14 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
     //ista metoda za FAB i klik na tekst
     fun onAddEpisode(view: View){
         startActivityForResult(AddEpisodeActivity.newInstance(this,
-            intent.getIntExtra(key, 1)), Activity.MODE_APPEND)
+            intent.getIntExtra(SHOW_KEY, 1)), EPISODE_ADDED)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == Activity.MODE_APPEND && resultCode == Activity.RESULT_OK){
+        if(requestCode == EPISODE_ADDED && resultCode == Activity.RESULT_OK){
             recyclerViewEp.adapter?.notifyDataSetChanged()
-            if(ShowsList.listOfShows[intent.getIntExtra(key, 1)].episodes.size == 1){
+            if(ShowsList.listOfShows[intent.getIntExtra(SHOW_KEY, 1)].episodes.size == 1){
                 emptyView.visibility = View.GONE
                 recyclerViewEp.visibility = View.VISIBLE
             }

@@ -1,6 +1,5 @@
 package com.infinum.shows_bruno_sacaric
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,7 +14,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         LoginButton.setOnClickListener {
-            startActivity(ShowsActivity.newInstance(this))
+            startActivity(WelcomeActivity.newInstance(this, usernameText.text.toString()))
         }
 
         var usrnmOK = false

@@ -6,7 +6,6 @@
         android:layout_height="match_parent">
 
     <include
-            android:id="@+id/toolbar"
             layout="@layout/toolbar"
             />
 
@@ -37,8 +36,7 @@
             android:textColor="#2e2e2e"
             android:textSize="20sp"
             android:layout_marginTop="34dp"
-            android:gravity="center_vertical"
-    />
+            android:gravity="center_vertical"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewEp"

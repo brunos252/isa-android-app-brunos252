@@ -3,7 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="98dp" xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_height="98dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
             android:layout_width="64dp"
@@ -12,8 +13,7 @@
             android:layout_marginBottom="4dp"
             android:layout_marginStart="16dp"
             app:cardCornerRadius="4dp"
-            android:elevation="0dp"
-            >
+            android:elevation="0dp">
         <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
@@ -44,7 +44,6 @@
             android:textSize="14sp"
             tools:text="(2015 - 2019)"
             android:textColor="#a0a0a0"
-            android:fontFamily="@font/karla"
-    />
+            android:fontFamily="@font/karla"/>
 
 </FrameLayout>

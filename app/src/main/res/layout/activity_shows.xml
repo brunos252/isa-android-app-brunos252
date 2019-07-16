@@ -15,8 +15,7 @@
             android:layout_marginStart="16dp"
             android:fontFamily="@font/karla_bold"
             android:textSize="28sp"
-            android:textColor="#2e2e2e"
-    />
+            android:textColor="#2e2e2e"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

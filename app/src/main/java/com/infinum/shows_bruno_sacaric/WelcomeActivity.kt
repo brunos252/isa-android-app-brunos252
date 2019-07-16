@@ -2,10 +2,11 @@ package com.infinum.shows_bruno_sacaric
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.widget.TextView
-import com.google.android.material.textfield.TextInputEditText
+import androidx.appcompat.app.AppCompatActivity
+
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -30,5 +31,11 @@ class WelcomeActivity : AppCompatActivity() {
         if(username != null) {
             welcomeView.text = "Welcome $username"
         }
+
+        val handler = Handler()
+        handler.postDelayed({
+            startActivity(ShowsActivity.newInstance(this))
+            finish()
+        }, 1000)
     }
 }
