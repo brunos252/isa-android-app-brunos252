@@ -1,6 +1,5 @@
 package com.infinum.shows_bruno_sacaric
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
