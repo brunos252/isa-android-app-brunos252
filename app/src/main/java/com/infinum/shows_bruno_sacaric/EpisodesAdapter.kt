@@ -13,8 +13,11 @@ class EpisodesAdapter(private val listOfEpisodes: ArrayList<Episode>, private va
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
 
+        val episode = listOfEpisodes[position]
+
         with(holder.itemView){
-            nameView?.text = "${position+1}. ${listOfEpisodes[position].name}"
+            episodeTag.text = "S%02d E%02d".format(episode.season, episode.number)
+            nameView?.text = episode.name
             rootView.setOnClickListener{clickListener.onClick(position)}
         }
     }

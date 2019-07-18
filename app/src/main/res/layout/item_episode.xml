@@ -6,11 +6,25 @@
         android:layout_height="56dp">
 
     <TextView
+            android:id="@+id/episodeTag"
+            android:text="S01 E01"
+            android:letterSpacing="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:textSize="16sp"
+            android:fontFamily="@font/karla_bold"
+            android:textColor="@color/colorAccent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="18dp"
+            />
+
+    <TextView
             android:id="@+id/nameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="96dp"
             android:layout_marginTop="18dp"
             android:textColor="#2e2e2e"
             android:letterSpacing="0"
