@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+            android:id="@+id/seasonPickerText"
+            android:text="Season"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:layout_marginStart="70dp"
+            android:textSize="16sp"
+            android:letterSpacing="0"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="@font/roboto_medium"/>
+
+    <NumberPicker
+            android:id="@+id/numberPicker1"
+            android:theme="@style/NumberPicker"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_constraintTop_toBottomOf="@id/seasonPickerText"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="66dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+    </NumberPicker>
+
+    <TextView
+            android:id="@+id/episodePickerText"
+            android:text="Episode"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/seasonPickerText"
+            android:layout_marginTop="37dp"
+            android:layout_marginStart="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:letterSpacing="0"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="@font/roboto_medium"/>
+
+    <NumberPicker
+            android:id="@+id/numberPicker2"
+            android:theme="@style/NumberPicker"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_constraintTop_toBottomOf="@id/episodePickerText"
+            app:layout_constraintStart_toEndOf="@id/numberPicker1"
+            android:layout_marginStart="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+    </NumberPicker>
+
+    <Button
+            android:id="@+id/numberPickerSaveButton"
+            android:text="SAVE"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="260dp"
+            android:layout_marginStart="200dp"
+            android:layout_width="114dp"
+            android:layout_height="69dp"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="18sp"
+            android:textColor="@color/colorAccent"
+            android:letterSpacing="0"
+            android:background="@null"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
