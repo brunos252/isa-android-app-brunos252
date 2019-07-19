@@ -239,11 +239,15 @@ class AddEpisodeActivity : AppCompatActivity(){
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]
                     == PackageManager.PERMISSION_GRANTED){
                     openCamera()
+                } else{
+                    photoDialog?.dismiss()
                 }
             }
             MY_READ_PERMISSION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     openGallery()
+                } else{
+                    photoDialog?.dismiss()
                 }
             }
         }
