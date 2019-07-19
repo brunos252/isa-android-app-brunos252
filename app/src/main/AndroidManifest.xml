@@ -14,8 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddEpisodeActivity"
-            android:configChanges="orientation"/>
+        <activity android:name=".AddEpisodeActivity"/>
         <activity android:name=".EpisodesActivity"/>
         <activity android:name=".ShowsActivity"/>
         <activity android:name=".WelcomeActivity"/>
@@ -26,6 +25,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="com.sajo.android.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths"/>
+        </provider>
+
 
         <meta-data
                 android:name="preloaded_fonts"

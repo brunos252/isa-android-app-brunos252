@@ -2,7 +2,7 @@ package com.infinum.shows_bruno_sacaric
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -17,7 +17,14 @@ import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_add_episode.*
 import kotlinx.android.synthetic.main.number_picker_dialog.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
-import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.core.content.FileProvider
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddEpisodeActivity : AppCompatActivity(){
 
@@ -26,9 +33,14 @@ class AddEpisodeActivity : AppCompatActivity(){
 
     val SEASON = "SEASON"
     val EPISODE = "EPISODE"
+    val PHOTO_PATH = "PHOTO_PATH"
 
     var seasonNumber = 1
     var episodeNumber = 1
+
+    var photoDialog: Dialog? = null
+    var currentPhotoPath: String = ""
+
 
     lateinit var sharedPreferences : SharedPreferences
     lateinit var sharedPreferenceEditor : SharedPreferences.Editor
@@ -56,6 +68,15 @@ class AddEpisodeActivity : AppCompatActivity(){
             seasonNumber = savedInstanceState.getInt(SEASON)
             episodeNumber = savedInstanceState.getInt(EPISODE)
             numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
+            currentPhotoPath = savedInstanceState.getString(PHOTO_PATH)
+            if(currentPhotoPath != ""){
+                val imageUri = Uri.parse(currentPhotoPath)
+                imageView.setImageURI(imageUri)
+                imageView.visibility = View.VISIBLE
+                changePhotoText.visibility = View.VISIBLE
+                uploadPhotoText.visibility = View.GONE
+                cameraImage.visibility = View.GONE
+            }
         }
 
         val index = intent.getIntExtra(SHOW_KEY, 1)
@@ -83,12 +104,8 @@ class AddEpisodeActivity : AppCompatActivity(){
         }
 
         SaveButton.setOnClickListener {
-            val split = numberPickerText.text.split(',')
-            val season = Integer.parseInt(split[0].substring(2))
-            val episode = Integer.parseInt(split[1].substring(3))
-
             ShowsList.listOfShows[index].episodes.add(Episode(titleText.text.toString(), descText.text.toString(),
-                season, episode))
+                seasonNumber, episodeNumber))
             val returnIntent = Intent()
             returnIntent.putExtra("result", true)
             setResult(Activity.RESULT_OK, returnIntent)
@@ -123,8 +140,6 @@ class AddEpisodeActivity : AppCompatActivity(){
         } else {
             openCamera()
         }
-
-
     }
 
     fun onGalleryClick(view: View){
@@ -146,12 +161,30 @@ class AddEpisodeActivity : AppCompatActivity(){
             }
         } else {
             openGallery()
+
         }
     }
 
     fun openCamera(){
-        val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, MY_CAMERA_PERMISSION)
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch(ex: IOException){
+                    null
+                }
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.sajo.android.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, MY_CAMERA_PERMISSION)
+                    photoDialog?.dismiss()
+                }
+            }
+        }
     }
 
     fun openGallery(){
@@ -160,22 +193,37 @@ class AddEpisodeActivity : AppCompatActivity(){
         val mimeTypes = arrayOf("image/jpeg", "image/png")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         startActivityForResult(intent, MY_READ_PERMISSION)
+        photoDialog?.dismiss()
     }
 
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            currentPhotoPath = absolutePath
+        }
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == MY_CAMERA_PERMISSION && resultCode == Activity.RESULT_OK){
-            val photo = data?.getExtras()?.get("data") as Bitmap
-            imageView.setImageBitmap(photo)
+            val imageUri = Uri.parse(currentPhotoPath)
+            imageView.setImageURI(imageUri)
+
             imageView.visibility = View.VISIBLE
             changePhotoText.visibility = View.VISIBLE
             uploadPhotoText.visibility = View.GONE
             cameraImage.visibility = View.GONE
+
         } else if(requestCode == MY_READ_PERMISSION && resultCode == Activity.RESULT_OK){
-            val selectedImage = data?.getData()
-            imageView.setImageURI(selectedImage)
+            currentPhotoPath = data?.getData().toString()
+            imageView.setImageURI(data?.getData())
             imageView.visibility = View.VISIBLE
             changePhotoText.visibility = View.VISIBLE
             uploadPhotoText.visibility = View.GONE
@@ -189,7 +237,7 @@ class AddEpisodeActivity : AppCompatActivity(){
         when(requestCode){
             MY_CAMERA_PERMISSION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]
-                == PackageManager.PERMISSION_GRANTED){
+                    == PackageManager.PERMISSION_GRANTED){
                     openCamera()
                 }
             }
@@ -205,6 +253,7 @@ class AddEpisodeActivity : AppCompatActivity(){
         super.onSaveInstanceState(outState)
         outState.putInt(SEASON, seasonNumber)
         outState.putInt(EPISODE, episodeNumber)
+        outState.putString(PHOTO_PATH, currentPhotoPath)
     }
 
     fun showNpDialog(){
@@ -217,7 +266,6 @@ class AddEpisodeActivity : AppCompatActivity(){
         np1.minValue = 1
         np1.maxValue = 20
         np1.wrapSelectorWheel = false
-
 
         np2.minValue = 1
         np2.maxValue = 99
@@ -232,14 +280,15 @@ class AddEpisodeActivity : AppCompatActivity(){
             numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
             npDialog.dismiss()
         }
-
         npDialog.show()
+
     }
 
     fun showPhotoDialog(){
-        val photoDialog = Dialog(this)
-        photoDialog.setContentView(R.layout.add_photo_dialog)
-        photoDialog.show()
+        photoDialog = Dialog(this)
+        photoDialog?.setContentView(R.layout.add_photo_dialog)
+        photoDialog?.show()
+
     }
 
     override fun onStop(){
