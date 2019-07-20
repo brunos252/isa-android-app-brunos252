@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_episode.view.*
 
-class EpisodesAdapter(private val listOfEpisodes: ArrayList<Episode>, private val clickListener: onEpisodeClicked) :
+class EpisodesAdapter(private val clickListener: onEpisodeClicked) :
     RecyclerView.Adapter<EpisodesAdapter.EpisodeViewHolder>() {
+
+    private var listOfEpisodes = listOf<Episode>()
 
     override fun getItemCount(): Int = listOfEpisodes.size
 
@@ -20,6 +22,11 @@ class EpisodesAdapter(private val listOfEpisodes: ArrayList<Episode>, private va
             nameView?.text = episode.name
             rootView.setOnClickListener{clickListener.onClick(position)}
         }
+    }
+
+    fun setData(episodes: List<Episode>) {
+        this.listOfEpisodes = episodes
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {

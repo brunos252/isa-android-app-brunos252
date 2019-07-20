@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_show.view.*
 
-class ShowsAdapter(private val listOfShows: ArrayList<Show>, private val clickListener: onShowClicked) :
+class ShowsAdapter(private val clickListener: onShowClicked) :
     RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>() {
+
+    private var listOfShows = listOf<Show>()
 
     override fun getItemCount(): Int = listOfShows.size
 
@@ -21,6 +23,11 @@ class ShowsAdapter(private val listOfShows: ArrayList<Show>, private val clickLi
             rootView.setOnClickListener{clickListener.onClick(position)}
         }
 
+    }
+
+    fun setData(shows: List<Show>) {
+        this.listOfShows = shows
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
