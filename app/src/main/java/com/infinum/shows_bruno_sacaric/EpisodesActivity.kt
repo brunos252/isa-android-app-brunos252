@@ -24,7 +24,7 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
     }
 
     private lateinit var viewModel: EpisodesViewModel
-    private lateinit var adapter: EpisodesAdapter
+    private var adapter = EpisodesAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,26 +32,20 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
 
         val index = intent.getIntExtra(SHOW_KEY, 1)
 
-        adapter = EpisodesAdapter(this)
         viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(index))
             .get(EpisodesViewModel::class.java)
         viewModel.liveData.observe(this, Observer { episodes ->
-            if(episodes != null){
-                adapter.setData(episodes)
-                if(episodes.isEmpty()){
-                    emptyView.visibility = View.VISIBLE
-                    recyclerViewEp.visibility = View.GONE
-                } else{
-                    emptyView.visibility = View.GONE
-                    recyclerViewEp.visibility = View.VISIBLE
-                }
-            } else{
+            if(episodes.isNullOrEmpty()){
                 emptyView.visibility = View.VISIBLE
                 recyclerViewEp.visibility = View.GONE
+            } else{
+                adapter.setData(episodes)
+                emptyView.visibility = View.GONE
+                recyclerViewEp.visibility = View.VISIBLE
             }
         })
 
-        val show = viewModel.getShow()
+        val show = viewModel.getShow().value!!
 
         recyclerViewEp.layoutManager = LinearLayoutManager(this)
         recyclerViewEp.adapter = adapter

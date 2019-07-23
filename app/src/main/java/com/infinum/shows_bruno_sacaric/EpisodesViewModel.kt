@@ -5,20 +5,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 
-class EpisodesViewModel(showId: Int) : ViewModel(), Observer<List<Episode>> {
+class EpisodesViewModel(private var showId: Int) :ViewModel(), Observer<List<Episode>> {
 
     private val episodesLiveData = MutableLiveData<List<Episode>>()
-    private var showId = showId
+    private val showLiveData = MutableLiveData<Show>()
+
 
     val liveData: LiveData<List<Episode>> get() {
         return episodesLiveData
     }
 
-    private var episodesList = listOf<Episode>()
-
+    fun getShow() : LiveData<Show> {
+        return showLiveData
+    }
 
     init {
-        episodesLiveData.value = episodesList
+        episodesLiveData.value = listOf()
+        showLiveData.value = ShowsRepository.getShows().value?.get(showId)
         EpisodesRepository.getEpisodes(showId).observeForever(this)
     }
 
@@ -26,13 +29,8 @@ class EpisodesViewModel(showId: Int) : ViewModel(), Observer<List<Episode>> {
         EpisodesRepository.addEpisode(episode, showId)
     }
 
-    fun getShow() : Show {
-        return ShowsRepository.getShows().value?.get(showId)!!
-    }
-
     override fun onChanged(shows: List<Episode>?) {
-        episodesList = shows ?: listOf()
-        episodesLiveData.value = episodesList
+        episodesLiveData.value = shows ?: listOf()
     }
 
 }

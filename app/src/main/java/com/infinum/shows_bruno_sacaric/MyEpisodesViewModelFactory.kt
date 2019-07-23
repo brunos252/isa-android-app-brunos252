@@ -1,7 +1,6 @@
 package com.infinum.shows_bruno_sacaric
 
 import androidx.lifecycle.ViewModel
-import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 
 
