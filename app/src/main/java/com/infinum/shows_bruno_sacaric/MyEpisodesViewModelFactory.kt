@@ -5,7 +5,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 
 
-class MyEpisodesViewModelFactory(private val mApplication: Application, private val showId: Int) :
+class MyEpisodesViewModelFactory(private val showId: Int) :
     ViewModelProvider.Factory {
 
 

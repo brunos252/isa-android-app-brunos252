@@ -34,7 +34,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         val handler = Handler()
         handler.postDelayed({
-            startActivity(ShowsActivity.newInstance(this))
+            startActivity(ShowsContainerActivity.newInstance(this))
             finish()
         }, 1000)
     }

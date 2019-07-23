@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_episodes.*
+import kotlinx.android.synthetic.main.fragment_episodes.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
@@ -28,12 +28,12 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_episodes)
+        setContentView(R.layout.fragment_episodes)
 
         val index = intent.getIntExtra(SHOW_KEY, 1)
 
         adapter = EpisodesAdapter(this)
-        viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(this.application, index))
+        viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(index))
             .get(EpisodesViewModel::class.java)
         viewModel.liveData.observe(this, Observer { episodes ->
             if(episodes != null){
