@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -21,12 +20,23 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import androidx.lifecycle.ViewModelProviders
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddEpisodeActivity : AppCompatActivity(){
+
+    companion object {
+        const val SHOW_KEY = "SHOW"
+
+        fun newInstance(context: Context, index: Int): Intent {
+            val intent = Intent(context, AddEpisodeActivity::class.java)
+            intent.putExtra(SHOW_KEY, index)
+            return intent
+        }
+    }
 
     val MY_CAMERA_PERMISSION = 707
     val MY_READ_PERMISSION = 606
@@ -41,27 +51,12 @@ class AddEpisodeActivity : AppCompatActivity(){
     var photoDialog: Dialog? = null
     var currentPhotoPath: String = ""
 
-
-    lateinit var sharedPreferences : SharedPreferences
-    lateinit var sharedPreferenceEditor : SharedPreferences.Editor
-
-    companion object {
-        const val SHOW_KEY = "SHOW"
-
-        fun newInstance(context: Context, index: Int): Intent {
-            val intent = Intent(context, AddEpisodeActivity::class.java)
-            intent.putExtra(SHOW_KEY, index)
-            return intent
-        }
-    }
+    private lateinit var viewModel: EpisodesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_episode)
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-        seasonNumber = sharedPreferences.getInt(SEASON, 1)
-        episodeNumber = sharedPreferences.getInt(EPISODE, 1)
         numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
 
         if(savedInstanceState != null){
@@ -80,7 +75,8 @@ class AddEpisodeActivity : AppCompatActivity(){
         }
 
         val index = intent.getIntExtra(SHOW_KEY, 1)
-
+        viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(index))
+            .get(EpisodesViewModel::class.java)
         toolbar.title = "Add episode"
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener {
@@ -104,11 +100,11 @@ class AddEpisodeActivity : AppCompatActivity(){
         }
 
         SaveButton.setOnClickListener {
-            ShowsList.listOfShows[index].episodes.add(Episode(titleText.text.toString(), descText.text.toString(),
-                seasonNumber, episodeNumber))
-            val returnIntent = Intent()
-            returnIntent.putExtra("result", true)
-            setResult(Activity.RESULT_OK, returnIntent)
+            viewModel.addEpisode(
+                Episode(
+                    titleText.text.toString(), descText.text.toString(), seasonNumber, episodeNumber
+                )
+            )
             finish()
         }
     }
@@ -293,13 +289,5 @@ class AddEpisodeActivity : AppCompatActivity(){
         photoDialog?.setContentView(R.layout.add_photo_dialog)
         photoDialog?.show()
 
-    }
-
-    override fun onStop(){
-        super.onStop()
-        sharedPreferenceEditor = sharedPreferences.edit()
-        sharedPreferenceEditor.putInt(SEASON, seasonNumber)
-        sharedPreferenceEditor.putInt(EPISODE, episodeNumber)
-        sharedPreferenceEditor.apply()
     }
 }
