@@ -75,7 +75,7 @@ class AddEpisodeActivity : AppCompatActivity(){
         }
 
         val index = intent.getIntExtra(SHOW_KEY, 1)
-        viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(this.application, index))
+        viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(index))
             .get(EpisodesViewModel::class.java)
         toolbar.title = "Add episode"
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)

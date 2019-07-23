@@ -25,7 +25,7 @@ class EpisodesAdapter(private val clickListener: onEpisodeClicked) :
     }
 
     fun setData(episodes: List<Episode>) {
-        this.listOfEpisodes = episodes
+        listOfEpisodes = episodes
         notifyDataSetChanged()
     }
 
