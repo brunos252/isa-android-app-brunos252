@@ -35,11 +35,11 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.onEpisodeClicked {
         viewModel = ViewModelProviders.of(this, MyEpisodesViewModelFactory(index))
             .get(EpisodesViewModel::class.java)
         viewModel.liveData.observe(this, Observer { episodes ->
-            adapter.setData(episodes)
             if(episodes.isNullOrEmpty()){
                 emptyView.visibility = View.VISIBLE
                 recyclerViewEp.visibility = View.GONE
             } else{
+                adapter.setData(episodes)
                 emptyView.visibility = View.GONE
                 recyclerViewEp.visibility = View.VISIBLE
             }
