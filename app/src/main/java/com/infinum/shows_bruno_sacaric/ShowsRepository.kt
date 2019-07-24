@@ -22,7 +22,6 @@ object ShowsRepository {
                 it.readObject() as MutableList<Show>
             }
         } catch (e: Exception) {
-            //mutableListOf()
             initStorage()
         }
     }

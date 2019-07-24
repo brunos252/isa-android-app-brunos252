@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -45,13 +46,6 @@ class ShowsFragment : Fragment(), ShowsAdapter.onShowClicked {
     }
 
     override fun onClick(index: Int) {
-        /*
-        fragmentManager?.beginTransaction()?.apply {
-            replace(R.id.fragmentContainer, EpisodesFragment())
-            addToBackStack("Episode details")
-            commit()
-        }*/
         listener?.openShowClick(index)
-        //startActivity(EpisodesActivity.newInstance(requireContext(), index))
     }
 }

@@ -1,6 +1,6 @@
 package com.infinum.shows_bruno_sacaric
 
-import android.Manifest
+/*import android.Manifest
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import android.app.Dialog
@@ -13,7 +13,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import kotlinx.android.synthetic.main.activity_add_episode.*
+import kotlinx.android.synthetic.main.fragment_add_episode.*
 import kotlinx.android.synthetic.main.number_picker_dialog.*
 import kotlinx.android.synthetic.main.toolbar.toolbar
 import android.net.Uri
@@ -55,7 +55,7 @@ class AddEpisodeActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_episode)
+        setContentView(R.layout.fragment_add_episode)
 
         numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
 
@@ -291,3 +291,4 @@ class AddEpisodeActivity : AppCompatActivity(){
 
     }
 }
+*/

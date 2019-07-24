@@ -15,7 +15,7 @@ class EpisodesViewModel(private var showId: Int) :ViewModel(), Observer<List<Epi
         return episodesLiveData
     }
 
-    fun getShow() : LiveData<Show> {
+    val show: LiveData<Show> get() {
         return showLiveData
     }
 
