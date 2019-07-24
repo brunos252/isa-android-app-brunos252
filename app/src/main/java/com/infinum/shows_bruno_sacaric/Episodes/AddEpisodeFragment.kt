@@ -1,4 +1,4 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.Episodes
 
 
 import android.Manifest
@@ -16,11 +16,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProviders
+import com.infinum.shows_bruno_sacaric.Repository.Episode
+import com.infinum.shows_bruno_sacaric.R
 import kotlinx.android.synthetic.main.add_photo_dialog.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import kotlinx.android.synthetic.main.number_picker_dialog.*
@@ -80,8 +81,8 @@ class AddEpisodeFragment : Fragment() {
         }
 
         val index = arguments?.getInt(SHOW_KEY, 1)
-        viewModel = ViewModelProviders.of(activity!!, MyEpisodesViewModelFactory(index!!))
-            .get(EpisodesViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
+        viewModel.selectShow(index!!)
         toolbar.title = "Add episode"
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener {

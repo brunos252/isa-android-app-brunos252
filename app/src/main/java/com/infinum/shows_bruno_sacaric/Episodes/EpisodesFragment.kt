@@ -1,15 +1,17 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.Episodes
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.infinum.shows_bruno_sacaric.FragmentActionListener
+import com.infinum.shows_bruno_sacaric.R
+import com.infinum.shows_bruno_sacaric.Repository.Show
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -48,8 +50,8 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
 
         val index = arguments?.getInt(SHOW_KEY, 1)
 
-        viewModel = ViewModelProviders.of(activity!!, MyEpisodesViewModelFactory(index!!))
-            .get(EpisodesViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
+        viewModel.selectShow(index!!)
         viewModel.liveData.observe(this, Observer { episodes ->
             if(episodes.isNullOrEmpty()){
                 emptyView.visibility = View.VISIBLE
@@ -61,24 +63,18 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
             }
         })
 
-        viewModel.show.observe(this, Observer { show ->
-            if(show != null){
-                this.show = show
-            }
-        })
-
-        //val show = viewModel.getShow().value!!
+        val show = viewModel.show.value!!
 
         recyclerViewEp.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewEp.adapter = adapter
 
-        toolbar.title = show?.name
+        toolbar.title = show.name
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener {
             fragmentManager?.popBackStack()
         }
 
-        showDesc.text = show?.description
+        showDesc.text = show.description
 
         clickableText.setOnClickListener {
             listener?.addEpisodeClick(arguments?.getInt(SHOW_KEY)!!)

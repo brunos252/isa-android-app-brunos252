@@ -1,5 +1,6 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.Repository
 
+import com.infinum.shows_bruno_sacaric.Repository.Episode
 import java.io.Serializable
 
 data class Show(

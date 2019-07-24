@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
  import android.os.Bundle
-import android.view.View
-import android.widget.Toast
+import com.infinum.shows_bruno_sacaric.Episodes.AddEpisodeFragment
+import com.infinum.shows_bruno_sacaric.Episodes.EpisodesFragment
+import com.infinum.shows_bruno_sacaric.Shows.ShowsFragment
+
 
 class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
 
     override fun openShowClick(index: Int) {
-        Toast.makeText(this, "$index", Toast.LENGTH_SHORT).show()
-
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, EpisodesFragment.newInstance(index))
             addToBackStack("Show detail")
@@ -38,13 +38,13 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shows_container)
 
-        //if(supportFragmentManager.backStackEntryCount == 0) {
+        if(supportFragmentManager.backStackEntryCount == 0) {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentContainer, ShowsFragment())
                 //addToBackStack("Shows list")
                 commit()
             }
-       // }
+        }
     }
 }
 

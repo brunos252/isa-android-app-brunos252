@@ -1,4 +1,4 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.Repository
 
 import java.io.Serializable
 
