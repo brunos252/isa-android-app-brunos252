@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,9 @@ class AddEpisodeFragment : Fragment() {
     val SEASON = "SEASON"
     val EPISODE = "EPISODE"
     val PHOTO_PATH = "PHOTO_PATH"
+    val TITLE_TEXT = "TITLE_TEXT"
+    val DESC_TEXT = "DESC_TEXT"
+    val INDEX = "INDEX"
 
     var seasonNumber = 1
     var episodeNumber = 1
@@ -55,6 +59,7 @@ class AddEpisodeFragment : Fragment() {
     var currentPhotoPath: String = ""
 
     private lateinit var viewModel: EpisodesViewModel
+    private lateinit var bundleViewModel: AddEpisodeViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_episode, container, false)
@@ -65,11 +70,27 @@ class AddEpisodeFragment : Fragment() {
 
         numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
 
-        if(savedInstanceState != null){
-            seasonNumber = savedInstanceState.getInt(SEASON)
-            episodeNumber = savedInstanceState.getInt(EPISODE)
+        val index = arguments?.getInt(SHOW_KEY, 1)
+        viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
+        viewModel.selectShow(index!!)
+        toolbar.title = "Add episode"
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener {
+            bundleViewModel.disposeOfBundle()
+            fragmentManager?.popBackStack()
+        }
+
+        bundleViewModel = ViewModelProviders.of(activity!!).get(AddEpisodeViewModel::class.java)
+
+        if(bundleViewModel.liveData.value != null && bundleViewModel.liveData.value!!.getInt(INDEX) == index){
+            val bundle : Bundle = bundleViewModel.liveData.value!!
+            seasonNumber = bundle.getInt(SEASON)
+            episodeNumber = bundle.getInt(EPISODE)
+            titleText.setText(bundle.getString(TITLE_TEXT))
+            descText.setText(bundle.getString(DESC_TEXT))
             numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
-            currentPhotoPath = savedInstanceState.getString(PHOTO_PATH)
+            currentPhotoPath = bundle.getString(PHOTO_PATH)
+            currentPhotoPath
             if(currentPhotoPath != ""){
                 val imageUri = Uri.parse(currentPhotoPath)
                 imageView.setImageURI(imageUri)
@@ -78,15 +99,6 @@ class AddEpisodeFragment : Fragment() {
                 uploadPhotoText.visibility = View.GONE
                 cameraImage.visibility = View.GONE
             }
-        }
-
-        val index = arguments?.getInt(SHOW_KEY, 1)
-        viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
-        viewModel.selectShow(index!!)
-        toolbar.title = "Add episode"
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        toolbar.setNavigationOnClickListener {
-            fragmentManager?.popBackStack()
         }
 
         titleText.addTextChangedListener(object: TextWatcher {
@@ -115,9 +127,9 @@ class AddEpisodeFragment : Fragment() {
                     titleText.text.toString(), descText.text.toString(), seasonNumber, episodeNumber
                 )
             )
+            bundleViewModel.disposeOfBundle()
             fragmentManager?.popBackStack()
         }
-
     }
 
     fun onCameraClick(){
@@ -257,10 +269,25 @@ class AddEpisodeFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        val bundle = Bundle()
+        bundle.putInt(SEASON, seasonNumber)
+        bundle.putInt(EPISODE, episodeNumber)
+        bundle.putString(PHOTO_PATH, currentPhotoPath)
+        bundle.putString(TITLE_TEXT, titleText.text.toString())
+        bundle.putString(DESC_TEXT, descText.text.toString())
+        bundle.putInt(INDEX, arguments?.getInt(SHOW_KEY, 1)!!)
+        bundleViewModel.addBundle(bundle)
         super.onSaveInstanceState(outState)
-        outState.putInt(SEASON, seasonNumber)
-        outState.putInt(EPISODE, episodeNumber)
-        outState.putString(PHOTO_PATH, currentPhotoPath)
+    }
+
+    override fun onDestroyView() {
+        Log.d("on", "destroy");
+        super.onDestroyView()
+    }
+
+    override fun onDetach() {
+        Log.d("on", "detach")
+        super.onDetach()
     }
 
     fun showNpDialog(){

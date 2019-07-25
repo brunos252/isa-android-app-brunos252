@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.infinum.shows_bruno_sacaric.FragmentActionListener
 import com.infinum.shows_bruno_sacaric.R
-import com.infinum.shows_bruno_sacaric.repository.Show
 import kotlinx.android.synthetic.main.fragment_episodes.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -44,8 +43,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
 
     private lateinit var viewModel: EpisodesViewModel
     private var adapter = EpisodesAdapter(this)
-
-    private var show : Show? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,6 +89,5 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
     //za pritisak na pojedinacnu epizodu
     override fun onClick(index: Int) {
     }
-
 
 }

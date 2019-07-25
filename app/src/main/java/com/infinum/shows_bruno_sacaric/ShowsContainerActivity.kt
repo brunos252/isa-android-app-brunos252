@@ -4,13 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
  import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import com.infinum.shows_bruno_sacaric.episodes.AddEpisodeFragment
 import com.infinum.shows_bruno_sacaric.episodes.EpisodesFragment
-import com.infinum.shows_bruno_sacaric.repository.Episode
-import com.infinum.shows_bruno_sacaric.shows.ShowsAdapter
 import com.infinum.shows_bruno_sacaric.shows.ShowsFragment
 import kotlinx.android.synthetic.main.activity_shows_container.*
 
@@ -64,72 +59,66 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shows_container)
-        Toast.makeText(this, supportFragmentManager.backStackEntryCount.toString(), Toast.LENGTH_SHORT).show()
 
         var wasTPain : Boolean = false
+        tPain = detailsFrame != null
 
         if(savedInstanceState != null) {
             showSelected = savedInstanceState.getBoolean(SHOW_SELECTED)
             currIndex = savedInstanceState.getInt(CURRENT_INDEX)
             wasTPain = savedInstanceState.getBoolean(T_PAIN)
-            //ako prelazimo iz okomitog u vodoravno na mobitelu treba podesiti
-            if(!wasTPain && detailsFrame == null && supportFragmentManager.backStackEntryCount == 0) {
+            //iz okomitog u vodoravno na mobitelu te iz okomitog u vodoravno na tabletu ako je prethodno bio odabran
+            //show, nije deselectan na backPress
+            if(!wasTPain /*&& detailsFrame == null*/ && supportFragmentManager.backStackEntryCount == 0) {
                 showSelected = false
+            }
+        } else {
+            //init postavljanje shows koji je za vrijeme activityja uvijek na istom mjestu (showsFrame)
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.showsFrame, ShowsFragment())
+                commit()
+            }
+            //da kod prve kreacije ne ide dalje na ispitivanje uvjeta
+            if(!tPain) return
+        }
+        //ova kombinacija booleana je jedino dok se kreira u masterSlave ili rotira iz obicno u masterSlave bez
+        //izabranog showa
+        if(tPain && !showSelected) {
+            currIndex = 0
+            showSelected = false
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.detailsFrame, EpisodesFragment.newInstance(currIndex, tPain))
+                commit()
             }
         }
 
-        tPain = detailsFrame != null
-
         if(tPain) {
-            if(supportFragmentManager.backStackEntryCount == 0){
-                currIndex = 0
-                showSelected = false
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.showsFrame, ShowsFragment())
-                    commit()
+            //ovo je ostvareno samo kada dolazimo iz okomitog, osim kod stvaranja kada je EntryCount == 0 sto nemamo
+            when {
+                supportFragmentManager.backStackEntryCount == 1 -> {
+                    supportFragmentManager.popBackStack()
+                    openShowClick(currIndex)
                 }
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.detailsFrame, EpisodesFragment.newInstance(currIndex, tPain))
-                    commit()
-                }
-            } else if(supportFragmentManager.backStackEntryCount == 1) {
-                supportFragmentManager.popBackStack()
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.detailsFrame, EpisodesFragment.newInstance(currIndex, tPain))
-                    commit()
-                }
-            } else if(supportFragmentManager.backStackEntryCount == 2) {
-                //znaci da dolazimo iz !tPain moda
-                supportFragmentManager.popBackStack()
-                supportFragmentManager.popBackStack()
-                supportFragmentManager.beginTransaction().apply {
+                supportFragmentManager.backStackEntryCount == 2 -> {
+                    supportFragmentManager.popBackStack()
+                    supportFragmentManager.popBackStack()
                     addEpisodeClick(currIndex)
                 }
             }
-
-
         } else {
-            if(supportFragmentManager.backStackEntryCount == 0) {
-                if(showSelected){
+            //kad je EntryCount 2 raspored ostaje isti
+            when {
+                supportFragmentManager.backStackEntryCount == 0 -> if(showSelected){
                     openShowClick(currIndex)
                 } else {
-                    supportFragmentManager.beginTransaction().apply {
-                        replace(R.id.showsFrame, ShowsFragment())
-                        commit()
-                    }
                     currIndex = 0
                 }
-            } else if(supportFragmentManager.backStackEntryCount == 1) {
-                //treba nekak zapamtit kaj je dodano u
-                if(wasTPain) {
-                    supportFragmentManager.popBackStack()
-                    openShowClick(currIndex)
-                    addEpisodeClick(currIndex)
-                } else {
-                    //do nothing
-                }
-            } else if(supportFragmentManager.backStackEntryCount == 2) {
-                //do nothing
+                supportFragmentManager.backStackEntryCount == 1 -> if(wasTPain) {
+                        //treba nekak zapamtit kaj je dodano u addEpisode
+                        supportFragmentManager.popBackStack()
+                        openShowClick(currIndex)
+                        addEpisodeClick(currIndex)
+                    }
             }
         }
     }
