@@ -1,11 +1,11 @@
-package com.infinum.shows_bruno_sacaric.Shows
+package com.infinum.shows_bruno_sacaric.shows
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.infinum.shows_bruno_sacaric.Repository.Show
-import com.infinum.shows_bruno_sacaric.Repository.ShowsRepository
+import com.infinum.shows_bruno_sacaric.repository.Show
+import com.infinum.shows_bruno_sacaric.repository.ShowsRepository
 
 class ShowsViewModel : ViewModel(), Observer<List<Show>> {
 

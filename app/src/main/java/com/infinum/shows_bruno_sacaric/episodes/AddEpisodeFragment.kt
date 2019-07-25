@@ -1,4 +1,4 @@
-package com.infinum.shows_bruno_sacaric.Episodes
+package com.infinum.shows_bruno_sacaric.episodes
 
 
 import android.Manifest
@@ -20,7 +20,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProviders
-import com.infinum.shows_bruno_sacaric.Repository.Episode
+import com.infinum.shows_bruno_sacaric.repository.Episode
 import com.infinum.shows_bruno_sacaric.R
 import kotlinx.android.synthetic.main.add_photo_dialog.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*

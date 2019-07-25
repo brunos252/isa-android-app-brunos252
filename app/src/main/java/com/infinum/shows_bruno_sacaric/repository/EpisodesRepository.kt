@@ -1,4 +1,4 @@
-package com.infinum.shows_bruno_sacaric.Repository
+package com.infinum.shows_bruno_sacaric.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

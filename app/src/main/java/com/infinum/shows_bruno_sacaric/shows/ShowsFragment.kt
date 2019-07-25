@@ -1,4 +1,4 @@
-package com.infinum.shows_bruno_sacaric.Shows
+package com.infinum.shows_bruno_sacaric.shows
 
 import android.content.Context
 import android.os.Bundle
@@ -41,6 +41,7 @@ class ShowsFragment : Fragment(), ShowsAdapter.onShowClicked {
                 adapter.setData(shows)
             }
         })
+
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter

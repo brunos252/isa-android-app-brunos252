@@ -1,10 +1,10 @@
-package com.infinum.shows_bruno_sacaric.Episodes
+package com.infinum.shows_bruno_sacaric.episodes
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.infinum.shows_bruno_sacaric.Repository.Episode
+import com.infinum.shows_bruno_sacaric.repository.Episode
 import com.infinum.shows_bruno_sacaric.R
 import kotlinx.android.synthetic.main.item_episode.view.*
 
