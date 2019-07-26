@@ -49,15 +49,11 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
         val index = arguments?.getInt(SHOW_KEY, 1)
 
         if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-            activity?.resources?.configuration?.screenWidthDp!! >= 600
-        ) {
-            //toolbar.setNavigationIcon(null)
+            activity?.resources?.configuration?.screenWidthDp!! >= 600) {
             toolbar.navigationIcon = null
         } else {
             toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_black_24dp)
         }
-
-
 
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
         viewModel.selectShow(index!!)
@@ -93,7 +89,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
             listener?.addEpisodeClick(arguments?.getInt(SHOW_KEY)!!)
         }
     }
-
     //za pritisak na pojedinacnu epizodu
     override fun onClick(index: Int) {
     }

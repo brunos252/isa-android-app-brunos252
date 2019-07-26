@@ -2,8 +2,8 @@ package com.infinum.shows_bruno_sacaric
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
- import android.os.Bundle
 import com.infinum.shows_bruno_sacaric.episodes.AddEpisodeFragment
 import com.infinum.shows_bruno_sacaric.episodes.EpisodesFragment
 import com.infinum.shows_bruno_sacaric.shows.ShowsFragment
@@ -22,13 +22,13 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         }
     }
 
-    var tPain: Boolean = false
-    var showSelected : Boolean = false
-    var currIndex : Int = 0
+    private var tPain: Boolean = false
+    private var showSelected: Boolean = false
+    private var currIndex: Int = 0
 
     override fun openShowClick(index: Int) {
         supportFragmentManager.beginTransaction().apply {
-            if(tPain) {
+            if (tPain) {
                 supportFragmentManager.popBackStack()
             }
 
@@ -53,7 +53,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
     override fun deselectShow() {
         showSelected = false
         currIndex = 0
-    }e
+    }
 
     override fun backPress() {
         this.onBackPressed()
@@ -63,14 +63,16 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shows_container)
 
-        var wasTPain : Boolean
+        val wasTPain: Boolean
         tPain = blankView != null
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             showSelected = savedInstanceState.getBoolean(SHOW_SELECTED)
             currIndex = savedInstanceState.getInt(CURRENT_INDEX)
             wasTPain = savedInstanceState.getBoolean(T_PAIN)
-            if(wasTPain && !showSelected) { supportFragmentManager.popBackStack() }
+            if (wasTPain && !showSelected) {
+                supportFragmentManager.popBackStack()
+            }
         } else {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.showsFrame, ShowsFragment())
@@ -78,7 +80,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
             }
         }
 
-        if(tPain && !showSelected) {
+        if (tPain && !showSelected) {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.detailsFrame, EpisodesFragment.newInstance(currIndex))
                 addToBackStack("init show select")
@@ -95,9 +97,12 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount == 1 && tPain) { supportFragmentManager.popBackStack() }
-        else if(supportFragmentManager.backStackEntryCount == 1 && !tPain) { deselectShow() }
-
+        if (supportFragmentManager.backStackEntryCount == 1 && tPain) {
+            supportFragmentManager.popBackStack()
+        } else if (supportFragmentManager.backStackEntryCount == 1 && !tPain) {
+            deselectShow()
+        }
+        super.onBackPressed()
     }
 }
 

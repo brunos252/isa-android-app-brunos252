@@ -25,8 +25,7 @@
             android:paddingBottom="25dp"
             android:fontFamily="@font/karla_bold"
             android:textSize="28sp"
-            android:textColor="@android:color/transparent"
-    />
+            android:textColor="@android:color/transparent"/>
 
     <FrameLayout
             android:id="@+id/detailsFrame"
@@ -36,7 +35,5 @@
             app:layout_constraintStart_toEndOf="@id/showsFrame"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

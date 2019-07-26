@@ -132,11 +132,11 @@ class AddEpisodeFragment : Fragment() {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("Permission").setMessage("Camera is needed to take a photo, storage to keep it")
                     .setPositiveButton("OK"){_, _ ->
-                        ActivityCompat.requestPermissions(activity!!, permissions, MY_CAMERA_PERMISSION
-                        )
+                        requestPermissions(permissions, MY_CAMERA_PERMISSION)
+
                     }.show()
             } else {
-                ActivityCompat.requestPermissions(activity!!, permissions, MY_CAMERA_PERMISSION)
+                requestPermissions(permissions, MY_CAMERA_PERMISSION)
 
             }
         } else {
@@ -159,11 +159,9 @@ class AddEpisodeFragment : Fragment() {
                     }.show()
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), permissions, MY_READ_PERMISSION)
-
             }
         } else {
             openGallery()
-
         }
     }
 
@@ -210,7 +208,6 @@ class AddEpisodeFragment : Fragment() {
             currentPhotoPath = absolutePath
         }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -260,16 +257,6 @@ class AddEpisodeFragment : Fragment() {
         outState.putInt(SEASON, seasonNumber)
         outState.putInt(EPISODE, episodeNumber)
         outState.putString(PHOTO_PATH, currentPhotoPath)
-    }
-
-    override fun onDestroyView() {
-        Log.d("on", "destroy");
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        Log.d("on", "detach")
-        super.onDetach()
     }
 
     fun showNpDialog(){

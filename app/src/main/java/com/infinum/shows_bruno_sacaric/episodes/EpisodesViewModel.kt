@@ -15,7 +15,6 @@ class EpisodesViewModel :ViewModel(), Observer<List<Episode>> {
     private val showLiveData = MutableLiveData<Show>()
     private var showId = -1
 
-
     val liveData: LiveData<List<Episode>> get() {
         return episodesLiveData
     }

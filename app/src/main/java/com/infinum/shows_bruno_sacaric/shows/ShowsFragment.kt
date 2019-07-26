@@ -39,6 +39,8 @@ class ShowsFragment : Fragment(), ShowsAdapter.onShowClicked {
         viewModel.liveData.observe(this, Observer { shows ->
             if(shows != null){
                 adapter.setData(shows)
+            } else {
+                adapter.setData(listOf())
             }
         })
 
