@@ -1,6 +1,5 @@
 package com.infinum.shows_bruno_sacaric.episodes
 
-
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
@@ -32,6 +31,13 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val MY_CAMERA_PERMISSION = 707
+const val MY_READ_PERMISSION = 606
+
+const val SEASON = "SEASON"
+const val EPISODE = "EPISODE"
+const val PHOTO_PATH = "PHOTO_PATH"
+
 class AddEpisodeFragment : Fragment() {
 
     companion object {
@@ -42,16 +48,6 @@ class AddEpisodeFragment : Fragment() {
         }
     }
 
-    val MY_CAMERA_PERMISSION = 707
-    val MY_READ_PERMISSION = 606
-
-    val SEASON = "SEASON"
-    val EPISODE = "EPISODE"
-    val PHOTO_PATH = "PHOTO_PATH"
-    val TITLE_TEXT = "TITLE_TEXT"
-    val DESC_TEXT = "DESC_TEXT"
-    val INDEX = "INDEX"
-
     var seasonNumber = 1
     var episodeNumber = 1
 
@@ -59,7 +55,6 @@ class AddEpisodeFragment : Fragment() {
     var currentPhotoPath: String = ""
 
     private lateinit var viewModel: EpisodesViewModel
-    private lateinit var bundleViewModel: AddEpisodeViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_episode, container, false)
@@ -76,21 +71,14 @@ class AddEpisodeFragment : Fragment() {
         toolbar.title = "Add episode"
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener {
-            bundleViewModel.disposeOfBundle()
             fragmentManager?.popBackStack()
         }
 
-        bundleViewModel = ViewModelProviders.of(activity!!).get(AddEpisodeViewModel::class.java)
-
-        if(bundleViewModel.liveData.value != null && bundleViewModel.liveData.value!!.getInt(INDEX) == index){
-            val bundle : Bundle = bundleViewModel.liveData.value!!
-            seasonNumber = bundle.getInt(SEASON)
-            episodeNumber = bundle.getInt(EPISODE)
-            titleText.setText(bundle.getString(TITLE_TEXT))
-            descText.setText(bundle.getString(DESC_TEXT))
+        if(savedInstanceState != null){
+            seasonNumber = savedInstanceState.getInt(SEASON)
+            episodeNumber = savedInstanceState.getInt(EPISODE)
             numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
-            currentPhotoPath = bundle.getString(PHOTO_PATH)
-            currentPhotoPath
+            currentPhotoPath = savedInstanceState.getString(PHOTO_PATH)
             if(currentPhotoPath != ""){
                 val imageUri = Uri.parse(currentPhotoPath)
                 imageView.setImageURI(imageUri)
@@ -127,7 +115,6 @@ class AddEpisodeFragment : Fragment() {
                     titleText.text.toString(), descText.text.toString(), seasonNumber, episodeNumber
                 )
             )
-            bundleViewModel.disposeOfBundle()
             fragmentManager?.popBackStack()
         }
     }
@@ -269,15 +256,10 @@ class AddEpisodeFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val bundle = Bundle()
-        bundle.putInt(SEASON, seasonNumber)
-        bundle.putInt(EPISODE, episodeNumber)
-        bundle.putString(PHOTO_PATH, currentPhotoPath)
-        bundle.putString(TITLE_TEXT, titleText.text.toString())
-        bundle.putString(DESC_TEXT, descText.text.toString())
-        bundle.putInt(INDEX, arguments?.getInt(SHOW_KEY, 1)!!)
-        bundleViewModel.addBundle(bundle)
         super.onSaveInstanceState(outState)
+        outState.putInt(SEASON, seasonNumber)
+        outState.putInt(EPISODE, episodeNumber)
+        outState.putString(PHOTO_PATH, currentPhotoPath)
     }
 
     override fun onDestroyView() {

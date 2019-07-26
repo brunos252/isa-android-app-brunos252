@@ -1,6 +1,7 @@
 package com.infinum.shows_bruno_sacaric.episodes
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +16,13 @@ import kotlinx.android.synthetic.main.fragment_episodes.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 const val SHOW_KEY = "key"
-const val T_PAIN = "tPain"
 
 class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
 
     companion object {
-        fun newInstance(index: Int, tPain: Boolean) = EpisodesFragment().apply {
+        fun newInstance(index: Int) = EpisodesFragment().apply {
             val args = Bundle()
             args.putInt(SHOW_KEY, index)
-            args.putBoolean(T_PAIN, tPain)
             arguments = args
         }
     }
@@ -49,6 +48,17 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
 
         val index = arguments?.getInt(SHOW_KEY, 1)
 
+        if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+            activity?.resources?.configuration?.screenWidthDp!! >= 600
+        ) {
+            //toolbar.setNavigationIcon(null)
+            toolbar.navigationIcon = null
+        } else {
+            toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_black_24dp)
+        }
+
+
+
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
         viewModel.selectShow(index!!)
         viewModel.liveData.observe(this, Observer { episodes ->
@@ -68,11 +78,9 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
         recyclerViewEp.adapter = adapter
 
         toolbar.title = show.name
-        if(arguments?.getBoolean(T_PAIN) == false) {
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-            toolbar.setNavigationOnClickListener {
-                fragmentManager?.popBackStack()
-            }
+        toolbar.setNavigationOnClickListener {
+            listener?.deselectShow()
+            listener?.backPress()
         }
 
         showDesc.text = show.description
@@ -89,5 +97,4 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
     //za pritisak na pojedinacnu epizodu
     override fun onClick(index: Int) {
     }
-
 }
