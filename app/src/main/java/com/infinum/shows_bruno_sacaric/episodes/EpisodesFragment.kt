@@ -49,7 +49,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
         val index = arguments?.getInt(SHOW_KEY, 1)
 
         if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-            activity?.resources?.configuration?.screenWidthDp!! >= 600) {
+            activity?.resources?.configuration?.smallestScreenWidthDp!! >= 600) {
             toolbar.navigationIcon = null
         } else {
             toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_black_24dp)
