@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_shows_container.*
 
 const val SHOW_SELECTED = "showSelected"
 const val CURRENT_INDEX = "currIndex"
+const val CURRENT_SHOWID = "currShowId"
 const val T_PAIN = "2Pac"
 
 class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
@@ -25,16 +26,18 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
     private var tPain: Boolean = false
     private var showSelected: Boolean = false
     private var currIndex: Int = 0
+    private var currShowId: String = ""
 
-    override fun openShowClick(index: Int) {
+    override fun openShowClick(index: Int, showId: String) {
         supportFragmentManager.beginTransaction().apply {
             if (tPain) {
                 supportFragmentManager.popBackStack()
             }
 
             currIndex = index
+            currShowId = showId
             showSelected = true
-            replace(R.id.detailsFrame, EpisodesFragment.newInstance(index))
+            replace(R.id.detailsFrame, EpisodesFragment.newInstance(showId))
             addToBackStack("Open show")
             commit()
         }
@@ -53,6 +56,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
     override fun deselectShow() {
         showSelected = false
         currIndex = 0
+        currShowId = ""
     }
 
     override fun backPress() {
@@ -69,6 +73,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         if (savedInstanceState != null) {
             showSelected = savedInstanceState.getBoolean(SHOW_SELECTED)
             currIndex = savedInstanceState.getInt(CURRENT_INDEX)
+            currShowId = savedInstanceState.getString(CURRENT_SHOWID)
             wasTPain = savedInstanceState.getBoolean(T_PAIN)
             if (wasTPain && !showSelected) {
                 supportFragmentManager.popBackStack()
@@ -82,7 +87,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
 
         if (tPain && !showSelected) {
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.detailsFrame, EpisodesFragment.newInstance(currIndex))
+                replace(R.id.detailsFrame, EpisodesFragment.newInstance(currShowId))
                 addToBackStack("init show select")
                 commit()
             }
@@ -93,6 +98,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         super.onSaveInstanceState(outState)
         outState.putBoolean(SHOW_SELECTED, showSelected)
         outState.putInt(CURRENT_INDEX, currIndex)
+        outState.putString(CURRENT_SHOWID, currShowId)
         outState.putBoolean(T_PAIN, tPain)
     }
 
@@ -102,12 +108,15 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         } else if (supportFragmentManager.backStackEntryCount == 1 && !tPain) {
             deselectShow()
         }
+        if (supportFragmentManager.backStackEntryCount == 0) {
+
+        }
         super.onBackPressed()
     }
 }
 
 interface FragmentActionListener {
-    fun openShowClick(index: Int)
+    fun openShowClick(index: Int, showId: String)
     fun addEpisodeClick(index: Int)
     fun deselectShow()
     fun backPress()

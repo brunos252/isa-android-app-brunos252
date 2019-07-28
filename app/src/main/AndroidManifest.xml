@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:name=".MyInfinumApp"
@@ -16,9 +17,14 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ShowsContainerActivity"/>
-        <activity android:name=".WelcomeActivity"/>
-        <activity android:name=".LoginActivity">
+        <activity
+                android:name=".ShowsContainerActivity"
+                android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".login.RegisterActivity"/>
+        <activity android:name=".login.WelcomeActivity"
+                  android:noHistory="true"/>
+        <activity android:name=".login.LoginActivity"
+                  android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

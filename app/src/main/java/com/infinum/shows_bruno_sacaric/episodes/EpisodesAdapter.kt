@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.infinum.shows_bruno_sacaric.repository.Episode
+import com.infinum.shows_bruno_sacaric.network.models.Episode
 import com.infinum.shows_bruno_sacaric.R
 import kotlinx.android.synthetic.main.item_episode.view.*
 
@@ -20,8 +20,16 @@ class EpisodesAdapter(private val clickListener: onEpisodeClicked) :
         val episode = listOfEpisodes[position]
 
         with(holder.itemView){
-            episodeTag.text = "S%02d E%02d".format(episode.season, episode.number)
-            nameView?.text = episode.name
+            with(episode) {
+                val s = season.toIntOrNull()
+                val e = episode.episode.toIntOrNull()
+                if(s == null || e == null || s > 20 || e > 99){
+                    episodeTag.text = "S%02d E%02d".format(20, 99)
+                } else {
+                    episodeTag.text = "S%02d E%02d".format(episode.season.toInt(), episode.episode.toInt())
+                }
+                nameView?.text = episode.title
+            }
             rootView.setOnClickListener{clickListener.onClick(position)}
         }
     }

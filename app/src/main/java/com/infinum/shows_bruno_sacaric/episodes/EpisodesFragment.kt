@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,9 +21,9 @@ const val SHOW_KEY = "key"
 class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
 
     companion object {
-        fun newInstance(index: Int) = EpisodesFragment().apply {
+        fun newInstance(showId: String) = EpisodesFragment().apply {
             val args = Bundle()
-            args.putInt(SHOW_KEY, index)
+            args.putString(SHOW_KEY, showId)
             arguments = args
         }
     }
@@ -46,7 +47,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val index = arguments?.getInt(SHOW_KEY, 1)
+        val showId = arguments?.getString(SHOW_KEY)
 
         if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE &&
             activity?.resources?.configuration?.smallestScreenWidthDp!! >= 600) {
@@ -56,30 +57,38 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
         }
 
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
-        viewModel.selectShow(index!!)
-        viewModel.liveData.observe(this, Observer { episodes ->
-            if(episodes.isNullOrEmpty()){
-                emptyView.visibility = View.VISIBLE
-                recyclerViewEp.visibility = View.GONE
-            } else{
-                adapter.setData(episodes)
-                emptyView.visibility = View.GONE
-                recyclerViewEp.visibility = View.VISIBLE
+        viewModel.selectShow(showId!!)
+        viewModel.liveData.observe(this, Observer { showDetails ->
+            if(showDetails.show?.id != showId){
+                return@Observer
+            }
+            if(showDetails.isSuccessful){
+                if(showDetails.show != null){
+                    with(showDetails.show) {
+                        toolbar.title = name
+                        showDesc.text = description
+                    }
+                }
+                if(showDetails.episodes.isNullOrEmpty()){
+                    emptyView.visibility = View.VISIBLE
+                    recyclerViewEp.visibility = View.GONE
+                } else{
+                    adapter.setData(showDetails.episodes)
+                    emptyView.visibility = View.GONE
+                    recyclerViewEp.visibility = View.VISIBLE
+                }
+            } else {
+                Toast.makeText(requireContext(), "failed getting details", Toast.LENGTH_SHORT).show()
             }
         })
-
-        val show = viewModel.show.value!!
 
         recyclerViewEp.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewEp.adapter = adapter
 
-        toolbar.title = show.name
         toolbar.setNavigationOnClickListener {
             listener?.deselectShow()
             listener?.backPress()
         }
-
-        showDesc.text = show.description
 
         clickableText.setOnClickListener {
             listener?.addEpisodeClick(arguments?.getInt(SHOW_KEY)!!)

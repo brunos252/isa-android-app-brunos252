@@ -11,7 +11,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProviders
-import com.infinum.shows_bruno_sacaric.repository.Episode
 import com.infinum.shows_bruno_sacaric.R
 import kotlinx.android.synthetic.main.add_photo_dialog.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
@@ -67,7 +65,7 @@ class AddEpisodeFragment : Fragment() {
 
         val index = arguments?.getInt(SHOW_KEY, 1)
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
-        viewModel.selectShow(index!!)
+        //viewModel.selectShow(index!!)
         toolbar.title = "Add episode"
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener {
@@ -109,14 +107,14 @@ class AddEpisodeFragment : Fragment() {
             showNpDialog()
         }
 
-        SaveButton.setOnClickListener {
+        /*SaveButton.setOnClickListener {
             viewModel.addEpisode(
                 Episode(
                     titleText.text.toString(), descText.text.toString(), seasonNumber, episodeNumber
                 )
             )
             fragmentManager?.popBackStack()
-        }
+        }*/
     }
 
     fun onCameraClick(){

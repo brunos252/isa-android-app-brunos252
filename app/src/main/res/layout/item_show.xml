@@ -35,15 +35,4 @@
             android:fontFamily="@font/karla"
             tools:text="Doctor Who"/>
 
-    <TextView
-            android:id="@+id/airDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginTop="43dp"
-            android:textSize="14sp"
-            tools:text="(2015 - 2019)"
-            android:textColor="#a0a0a0"
-            android:fontFamily="@font/karla"/>
-
 </FrameLayout>
