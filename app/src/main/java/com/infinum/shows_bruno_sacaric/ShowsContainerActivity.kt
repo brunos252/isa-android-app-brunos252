@@ -9,18 +9,15 @@ import com.infinum.shows_bruno_sacaric.episodes.EpisodesFragment
 import com.infinum.shows_bruno_sacaric.shows.ShowsFragment
 import kotlinx.android.synthetic.main.activity_shows_container.*
 
-const val SHOW_SELECTED = "showSelected"
-const val CURRENT_INDEX = "currIndex"
-const val CURRENT_SHOWID = "currShowId"
-const val T_PAIN = "2Pac"
-
 class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
 
+    val SHOW_SELECTED = "showSelected"
+    val CURRENT_INDEX = "currIndex"
+    val CURRENT_SHOWID = "currShowId"
+    val T_PAIN = "2Pac"
+
     companion object {
-        fun newInstance(context: Context): Intent {
-            val intent = Intent(context, ShowsContainerActivity::class.java)
-            return intent
-        }
+        fun newInstance(context: Context) : Intent = Intent(context, ShowsContainerActivity::class.java)
     }
 
     private var tPain: Boolean = false
@@ -59,9 +56,8 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         currShowId = ""
     }
 
-    override fun backPress() {
+    override fun backPress() =
         this.onBackPressed()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -18,10 +18,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 class RegisterActivity : AppCompatActivity() {
 
     companion object {
-        fun newInstance(context: Context): Intent {
-            val intent = Intent(context, RegisterActivity::class.java)
-            return intent
-        }
+        fun newInstance(context: Context): Intent = Intent(context, RegisterActivity::class.java)
     }
 
     private lateinit var registerViewModel: RegisterViewModel
