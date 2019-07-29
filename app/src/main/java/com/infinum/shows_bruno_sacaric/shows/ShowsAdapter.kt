@@ -1,9 +1,11 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.shows
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.infinum.shows_bruno_sacaric.R
+import com.infinum.shows_bruno_sacaric.repository.Show
 import kotlinx.android.synthetic.main.item_show.view.*
 
 class ShowsAdapter(private val clickListener: onShowClicked) :

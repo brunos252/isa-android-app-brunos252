@@ -1,8 +1,10 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.infinum.shows_bruno_sacaric.MyInfinumApp
+import com.infinum.shows_bruno_sacaric.R
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
@@ -13,7 +15,8 @@ object ShowsRepository {
     private val showsLiveData = MutableLiveData<List<Show>>()
     private val listOfShows = readStorage()
 
-    fun getShows() : LiveData<List<Show>> = showsLiveData
+    fun getShows() : LiveData<List<Show>> =
+        showsLiveData
 
     private fun readStorage() : MutableList<Show> {
 
@@ -22,14 +25,14 @@ object ShowsRepository {
                 it.readObject() as MutableList<Show>
             }
         } catch (e: Exception) {
-            //mutableListOf()
             initStorage()
         }
     }
 
     fun addShow(show: Show) {
         listOfShows.add(show)
-        showsLiveData.value = listOfShows
+        showsLiveData.value =
+            listOfShows
 
         ObjectOutputStream(MyInfinumApp.instance.openFileOutput(FILENAME, Context.MODE_PRIVATE)).use {
             it.writeObject(listOfShows)
@@ -45,7 +48,8 @@ object ShowsRepository {
     }
 
     init {
-        showsLiveData.value = listOfShows
+        showsLiveData.value =
+            listOfShows
     }
 
     fun initStorage() : MutableList<Show> {

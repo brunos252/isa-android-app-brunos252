@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.infinum.shows_bruno_sacaric">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.infinum.shows_bruno_sacaric">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
             android:name=".MyInfinumApp"
@@ -15,9 +16,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddEpisodeActivity"/>
-        <activity android:name=".EpisodesActivity"/>
-        <activity android:name=".ShowsActivity"/>
+        <activity android:name=".ShowsContainerActivity"/>
         <activity android:name=".WelcomeActivity"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -36,7 +35,6 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_paths"/>
         </provider>
-
 
         <meta-data
                 android:name="preloaded_fonts"
