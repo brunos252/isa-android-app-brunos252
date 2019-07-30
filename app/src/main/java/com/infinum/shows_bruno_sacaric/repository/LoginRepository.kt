@@ -1,5 +1,7 @@
 package com.infinum.shows_bruno_sacaric.repository
 
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.infinum.shows_bruno_sacaric.network.Api

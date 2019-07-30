@@ -20,4 +20,11 @@ interface Api {
     @GET("api/shows/{showId}/episodes")
     fun getEpisodesList(@Path("showId") showId: String): Call<EpisodesListResponse>
 
+    //@GET("api/episodes/{episodeId}")
+    //fun getEpisode(@Path("episodeId") episodeId: String): Call<EpisodeResponse>
+
+    @GET("api/episodes/{episodeId}/comments")
+    fun getEpisodeComments(@Path("episodeId") episodeId: String): Call<EpisodeCommentsResponse>
+
+
 }

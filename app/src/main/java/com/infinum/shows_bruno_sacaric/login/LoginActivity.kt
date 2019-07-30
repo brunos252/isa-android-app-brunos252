@@ -16,13 +16,12 @@ import com.infinum.shows_bruno_sacaric.network.models.User
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.passwordText
 
-const val EMAIL = "EMAIL"
-const val PASSWORD = "PASSWORD"
-const val REMEMBER_ME = "REMEMBER_ME"
+const val TOKEN = "TOKEN"
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+    private var rememberMe: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,25 +30,25 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         loginViewModel.liveData.observe(this, Observer {
             if(it.isSuccessful) {
+                if(rememberMe) {
+                    with(this.getPreferences(Context.MODE_PRIVATE).edit()) {
+                        putString(TOKEN, it.data?.token)
+                        apply()
+                    }
+                }
                 startActivity(ShowsContainerActivity.newInstance(this))
+                finish()
             } else {
                 Toast.makeText(this, "login unsuccessful", Toast.LENGTH_SHORT).show()
             }
         })
 
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        var rememberMe = sharedPref.getBoolean(REMEMBER_ME, false)
-        if(rememberMe && sharedPref != null){
-            val email = sharedPref.getString(EMAIL, "")
-            val password = sharedPref.getString(PASSWORD, "")
-            if(email != null && password != null) {
-                usernameText.setText(email)
-                passwordText.setText(password)
-                rememberMeCheckBox.isChecked = true
-            }
-            loginViewModel.loginUser(User(email, password))
+        val token = sharedPref.getString(TOKEN, "")
+        if(token != "" && sharedPref != null){
+            startActivity(ShowsContainerActivity.newInstance(this))
+            finish()
         }
-
 
         var usrnmOK = false
         var passOK = false
@@ -87,31 +86,17 @@ class LoginActivity : AppCompatActivity() {
                 passOK = passwordText.text.toString().length >= 8
                 LoginButton.isEnabled = usrnmOK && passOK
             }
-
         })
 
         rememberMeCheckBox.setOnClickListener {
             val checkbox = findViewById<CheckBox>(R.id.rememberMeCheckBox)
-            if(checkbox.isChecked) {
-                rememberMe = true
-                with(sharedPref.edit()) {
-                    putBoolean(REMEMBER_ME, true)
-                    apply()
-                }
-            }
+            rememberMe = checkbox.isChecked
         }
 
         LoginButton.setOnClickListener {
             val email = usernameText.text.toString()
             val password = passwordText.text.toString()
             val user = User(email, password)
-            if(rememberMe){
-                with(this.getPreferences(Context.MODE_PRIVATE).edit()){
-                    putString(EMAIL, email)
-                    putString(PASSWORD, password)
-                    apply()
-                }
-            }
             loginViewModel.loginUser(user)
         }
 

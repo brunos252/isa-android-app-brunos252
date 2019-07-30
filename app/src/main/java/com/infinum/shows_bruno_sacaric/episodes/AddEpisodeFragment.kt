@@ -65,7 +65,6 @@ class AddEpisodeFragment : Fragment() {
 
         val index = arguments?.getInt(SHOW_KEY, 1)
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
-        //viewModel.selectShow(index!!)
         toolbar.title = "Add episode"
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener {
