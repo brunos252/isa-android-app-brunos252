@@ -1,4 +1,4 @@
-package com.infinum.shows_bruno_sacaric
+package com.infinum.shows_bruno_sacaric.login
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.infinum.shows_bruno_sacaric.R
+import com.infinum.shows_bruno_sacaric.ShowsContainerActivity
 
 
 class WelcomeActivity : AppCompatActivity() {

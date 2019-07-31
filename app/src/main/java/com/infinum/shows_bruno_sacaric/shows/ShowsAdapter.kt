@@ -5,30 +5,34 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.infinum.shows_bruno_sacaric.R
-import com.infinum.shows_bruno_sacaric.repository.Show
+import com.infinum.shows_bruno_sacaric.network.RetrofitClient
+import com.infinum.shows_bruno_sacaric.network.models.ShowListItem
+import com.infinum.shows_bruno_sacaric.network.models.ShowListResponse
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_show.view.*
 
 class ShowsAdapter(private val clickListener: onShowClicked) :
     RecyclerView.Adapter<ShowsAdapter.ShowViewHolder>() {
 
-    private var listOfShows = listOf<Show>()
+    private var listOfShows = listOf<ShowListItem>()
 
     override fun getItemCount(): Int = listOfShows.size
 
-    //svaki put kada view dode na ekran
     override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
 
         with(holder.itemView){
             titleView.text = listOfShows[position].name
-            imageView.setImageResource(listOfShows[position].imageid)
-            airDate.text = listOfShows[position].airDate
-            rootView.setOnClickListener{clickListener.onClick(position)}
+            if(listOfShows[position].imageUrl != "") {
+                Picasso.get().load(RetrofitClient.baseUrl + listOfShows[position].imageUrl)
+                    .into(imageView)
+            }
+            rootView.setOnClickListener{clickListener.onClick(position, listOfShows[position].id)}
         }
 
     }
 
-    fun setData(shows: List<Show>) {
-        this.listOfShows = shows
+    fun setData(showsList: ShowListResponse) {
+        this.listOfShows = showsList.shows!!
         notifyDataSetChanged()
     }
 
@@ -41,7 +45,7 @@ class ShowsAdapter(private val clickListener: onShowClicked) :
 
     interface onShowClicked{
 
-        fun onClick(index: Int)
+        fun onClick(index: Int, showId: String)
 
     }
 }

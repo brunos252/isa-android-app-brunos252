@@ -1,44 +1,40 @@
 package com.infinum.shows_bruno_sacaric.episodes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import com.infinum.shows_bruno_sacaric.repository.Episode
-import com.infinum.shows_bruno_sacaric.repository.EpisodesRepository
-import com.infinum.shows_bruno_sacaric.repository.Show
+import androidx.lifecycle.*
+import com.infinum.shows_bruno_sacaric.network.models.ShowDetails
 import com.infinum.shows_bruno_sacaric.repository.ShowsRepository
 
-class EpisodesViewModel :ViewModel(), Observer<List<Episode>> {
+class EpisodesViewModel :ViewModel(), Observer<ShowDetails> {
 
-    private val episodesLiveData = MutableLiveData<List<Episode>>()
-    private val showLiveData = MutableLiveData<Show>()
-    private var showId = -1
+    private val showDetailsLiveData = MutableLiveData<ShowDetails>()
+    private var showId = ""
 
-    val liveData: LiveData<List<Episode>> get() {
-        return episodesLiveData
-    }
-
-    val show : LiveData<Show> get() {
-        return showLiveData
+    val liveData : LiveData<ShowDetails> get() {
+        return showDetailsLiveData
     }
 
     init {
-        episodesLiveData.value = listOf()
+        ShowsRepository.showDetailLiveData().observeForever(this)
+
     }
 
-    fun selectShow(showId: Int) {
-        showLiveData.value = ShowsRepository.getShows().value?.get(showId)
-        EpisodesRepository.getEpisodes(showId).observeForever(this)
+    fun selectShow(showId: String) {
+        ShowsRepository.getShowDetails(showId)
         this.showId = showId
     }
-
+/*
     fun addEpisode(episode: Episode) {
         EpisodesRepository.addEpisode(episode, showId)
+    }*/
+
+    override fun onChanged(shows: ShowDetails?) {
+        showDetailsLiveData.value = shows ?: ShowDetails(
+            show = null, episodes = null, isSuccessful = false
+        )
     }
 
-    override fun onChanged(shows: List<Episode>?) {
-        episodesLiveData.value = shows ?: listOf()
+    override fun onCleared() {
+        ShowsRepository.showDetailLiveData().removeObserver(this)
     }
 
 }

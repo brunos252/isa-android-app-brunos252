@@ -9,36 +9,35 @@ import com.infinum.shows_bruno_sacaric.episodes.EpisodesFragment
 import com.infinum.shows_bruno_sacaric.shows.ShowsFragment
 import kotlinx.android.synthetic.main.activity_shows_container.*
 
-const val SHOW_SELECTED = "showSelected"
-const val CURRENT_INDEX = "currIndex"
-const val T_PAIN = "2Pac"
-
 class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
 
+    val SHOW_SELECTED = "showSelected"
+    val CURRENT_INDEX = "currIndex"
+    val CURRENT_SHOWID = "currShowId"
+    val TWO_PANE = "twoPane"
+
     companion object {
-        fun newInstance(context: Context): Intent {
-            val intent = Intent(context, ShowsContainerActivity::class.java)
-            return intent
-        }
+        fun newInstance(context: Context) : Intent = Intent(context, ShowsContainerActivity::class.java)
     }
 
-    private var tPain: Boolean = false
+    private var twoPane: Boolean = false
     private var showSelected: Boolean = false
     private var currIndex: Int = 0
+    private var currShowId: String = ""
 
-    override fun openShowClick(index: Int) {
+    override fun openShowClick(index: Int, showId: String) {
         supportFragmentManager.beginTransaction().apply {
-            if (tPain) {
+            if (twoPane) {
                 supportFragmentManager.popBackStack()
             }
 
             currIndex = index
+            currShowId = showId
             showSelected = true
-            replace(R.id.detailsFrame, EpisodesFragment.newInstance(index))
+            replace(R.id.detailsFrame, EpisodesFragment.newInstance(showId))
             addToBackStack("Open show")
             commit()
         }
-
     }
 
     override fun addEpisodeClick(index: Int) {
@@ -53,23 +52,24 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
     override fun deselectShow() {
         showSelected = false
         currIndex = 0
+        currShowId = ""
     }
 
-    override fun backPress() {
+    override fun backPress() =
         this.onBackPressed()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shows_container)
 
         val wasTPain: Boolean
-        tPain = blankView != null
+        twoPane = blankView != null
 
         if (savedInstanceState != null) {
             showSelected = savedInstanceState.getBoolean(SHOW_SELECTED)
             currIndex = savedInstanceState.getInt(CURRENT_INDEX)
-            wasTPain = savedInstanceState.getBoolean(T_PAIN)
+            currShowId = savedInstanceState.getString(CURRENT_SHOWID)
+            wasTPain = savedInstanceState.getBoolean(TWO_PANE)
             if (wasTPain && !showSelected) {
                 supportFragmentManager.popBackStack()
             }
@@ -80,9 +80,9 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
             }
         }
 
-        if (tPain && !showSelected) {
+        if (twoPane && !showSelected) {
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.detailsFrame, EpisodesFragment.newInstance(currIndex))
+                replace(R.id.detailsFrame, EpisodesFragment.newInstance(currShowId))
                 addToBackStack("init show select")
                 commit()
             }
@@ -93,13 +93,14 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
         super.onSaveInstanceState(outState)
         outState.putBoolean(SHOW_SELECTED, showSelected)
         outState.putInt(CURRENT_INDEX, currIndex)
-        outState.putBoolean(T_PAIN, tPain)
+        outState.putString(CURRENT_SHOWID, currShowId)
+        outState.putBoolean(TWO_PANE, twoPane)
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 1 && tPain) {
+        if (supportFragmentManager.backStackEntryCount == 1 && twoPane) {
             supportFragmentManager.popBackStack()
-        } else if (supportFragmentManager.backStackEntryCount == 1 && !tPain) {
+        } else if (supportFragmentManager.backStackEntryCount == 1 && !twoPane) {
             deselectShow()
         }
         super.onBackPressed()
@@ -107,7 +108,7 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
 }
 
 interface FragmentActionListener {
-    fun openShowClick(index: Int)
+    fun openShowClick(index: Int, showId: String)
     fun addEpisodeClick(index: Int)
     fun deselectShow()
     fun backPress()

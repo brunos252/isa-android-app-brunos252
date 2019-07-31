@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,7 +20,7 @@ class ShowsFragment : Fragment(), ShowsAdapter.onShowClicked {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is FragmentActionListener) {
+        if (context is FragmentActionListener) {
             listener = context
         }
     }
@@ -37,19 +38,18 @@ class ShowsFragment : Fragment(), ShowsAdapter.onShowClicked {
         adapter = ShowsAdapter(this)
         viewModel = ViewModelProviders.of(this).get(ShowsViewModel::class.java)
         viewModel.liveData.observe(this, Observer { shows ->
-            if(shows != null){
+            if (shows.isSuccessful) {
                 adapter.setData(shows)
             } else {
-                adapter.setData(listOf())
+                Toast.makeText(requireContext(), "no shows", Toast.LENGTH_SHORT).show()
             }
         })
-
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
     }
 
-    override fun onClick(index: Int) {
-        listener?.openShowClick(index)
+    override fun onClick(index: Int, showId: String) {
+        listener?.openShowClick(index, showId)
     }
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+            layout="@layout/toolbar"
+    />
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing"
+            android:hint="e-mail"
+            android:id="@+id/emailLayout"
+            android:layout_marginTop="@dimen/spacing_4x"
+            android:fontFamily="@font/karla"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/editTextMargin"
+            android:layout_marginEnd="@dimen/editTextMargin">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:id="@+id/emailText"
+                android:fontFamily="@font/karla"
+
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing"
+            android:hint="Password"
+            android:id="@+id/passwordLayout"
+            android:fontFamily="@font/karla"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/colorAccent"
+            app:endIconDrawable="@drawable/ic_show_password"
+            app:layout_constraintTop_toBottomOf="@+id/emailLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/editTextMargin"
+            android:layout_marginEnd="@dimen/editTextMargin">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:id="@+id/passwordText"
+                android:fontFamily="@font/karla"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password again"
+            android:id="@+id/passwordAgainLayout"
+            android:fontFamily="@font/karla"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/colorAccent"
+            app:endIconDrawable="@drawable/ic_show_password"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/editTextMargin"
+            android:layout_marginEnd="@dimen/editTextMargin">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:id="@+id/passwordAgainText"
+                android:fontFamily="@font/karla"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+            android:text="REGISTER"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:id="@+id/registerButton"
+            android:background="@drawable/button_rounded_selector"
+            android:enabled="false"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:lineSpacingExtra="4sp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/passwordAgainLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/spacing_2x"
+            android:layout_marginEnd="@dimen/spacing_2x"
+            android:layout_marginTop="@dimen/spacing_4x"
+            android:fontFamily="@font/karla_bold"
+            android:stateListAnimator="@null"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
