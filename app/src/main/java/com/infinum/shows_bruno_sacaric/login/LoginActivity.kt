@@ -1,6 +1,7 @@
 package com.infinum.shows_bruno_sacaric.login
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private var rememberMe: Boolean = false
 
+    companion object {
+        fun newInstance(context: Context): Intent = Intent(context, LoginActivity::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -31,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.liveData.observe(this, Observer {
             if(it.isSuccessful) {
                 if(rememberMe) {
-                    with(this.getPreferences(Context.MODE_PRIVATE).edit()) {
+                    with(this.getSharedPreferences(TOKEN, Context.MODE_PRIVATE).edit()) {
                         putString(TOKEN, it.data?.token)
                         apply()
                     }
@@ -42,13 +47,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "login unsuccessful", Toast.LENGTH_SHORT).show()
             }
         })
-
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        val token = sharedPref.getString(TOKEN, "")
-        if(token != "" && sharedPref != null){
-            startActivity(ShowsContainerActivity.newInstance(this))
-            finish()
-        }
 
         var usrnmOK = false
         var passOK = false
@@ -96,8 +94,7 @@ class LoginActivity : AppCompatActivity() {
         LoginButton.setOnClickListener {
             val email = usernameText.text.toString()
             val password = passwordText.text.toString()
-            val user = User(email, password)
-            loginViewModel.loginUser(user)
+            loginViewModel.loginUser(User(email, password))
         }
 
         createAccountClickableText.setOnClickListener {
