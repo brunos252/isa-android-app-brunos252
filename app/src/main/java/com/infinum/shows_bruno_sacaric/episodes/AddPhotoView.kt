@@ -15,9 +15,6 @@ class AddPhotoView  @JvmOverloads constructor(
 
     init {
         View.inflate(context, R.layout.view_add_photo, this)
-
-        //Implement logic, handle custom attributes
-
     }
 
     fun photoAdded() {
