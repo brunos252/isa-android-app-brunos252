@@ -82,23 +82,18 @@
 
     <Button
             android:text="LOG IN"
+            style="@style/mainButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/LoginButton"
-            android:background="@drawable/button_rounded_selector"
             android:enabled="false"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
             android:lineSpacingExtra="4sp"
-            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/spacing_2x"
             android:layout_marginEnd="@dimen/spacing_2x"
             android:layout_marginTop="@dimen/spacing_4x"
-            app:layout_constraintTop_toBottomOf="@+id/rememberMeCheckBox"
-            android:fontFamily="@font/karla_bold"
-            android:stateListAnimator="@null"/>
+            app:layout_constraintTop_toBottomOf="@+id/rememberMeCheckBox"/>
 
     <TextView
             android:fontFamily="@font/karla_bold"

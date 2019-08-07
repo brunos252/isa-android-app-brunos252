@@ -12,6 +12,8 @@ import com.infinum.shows_bruno_sacaric.ShowsContainerActivity
 
 class WelcomeActivity : AppCompatActivity() {
 
+    private val handler = Handler()
+
     companion object {
         const val USERNAME = "USERNAME"
 
@@ -34,10 +36,14 @@ class WelcomeActivity : AppCompatActivity() {
             welcomeView.text = "Welcome $username"
         }
 
-        val handler = Handler()
         handler.postDelayed({
             startActivity(ShowsContainerActivity.newInstance(this))
             finish()
         }, 1000)
+    }
+
+    override fun onStop() {
+        handler.removeCallbacksAndMessages(null)
+        super.onStop()
     }
 }

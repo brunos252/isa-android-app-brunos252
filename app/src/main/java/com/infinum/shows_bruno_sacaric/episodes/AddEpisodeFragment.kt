@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.add_photo_dialog.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 import kotlinx.android.synthetic.main.number_picker_dialog.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.view_add_photo.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -79,10 +80,7 @@ class AddEpisodeFragment : Fragment() {
             if(currentPhotoPath != ""){
                 val imageUri = Uri.parse(currentPhotoPath)
                 imageView.setImageURI(imageUri)
-                imageView.visibility = View.VISIBLE
-                changePhotoText.visibility = View.VISIBLE
-                uploadPhotoText.visibility = View.GONE
-                cameraImage.visibility = View.GONE
+                addPhotoView.photoAdded()
             }
         }
 
@@ -97,8 +95,7 @@ class AddEpisodeFragment : Fragment() {
                 SaveButton.isEnabled = !s.isNullOrEmpty()
             }
         })
-
-        addPhotoLayout.setOnClickListener {
+        addPhotoView.setOnClickListener {
             showPhotoDialog()
         }
 
@@ -211,19 +208,12 @@ class AddEpisodeFragment : Fragment() {
         if(requestCode == MY_CAMERA_PERMISSION && resultCode == Activity.RESULT_OK){
             val imageUri = Uri.parse(currentPhotoPath)
             imageView.setImageURI(imageUri)
-
-            imageView.visibility = View.VISIBLE
-            changePhotoText.visibility = View.VISIBLE
-            uploadPhotoText.visibility = View.GONE
-            cameraImage.visibility = View.GONE
+            addPhotoView.photoAdded()
 
         } else if(requestCode == MY_READ_PERMISSION && resultCode == Activity.RESULT_OK){
             currentPhotoPath = data?.getData().toString()
             imageView.setImageURI(data?.getData())
-            imageView.visibility = View.VISIBLE
-            changePhotoText.visibility = View.VISIBLE
-            uploadPhotoText.visibility = View.GONE
-            cameraImage.visibility = View.GONE
+            addPhotoView.photoAdded()
         }
 
     }

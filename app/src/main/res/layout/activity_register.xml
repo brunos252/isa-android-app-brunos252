@@ -85,22 +85,17 @@
 
     <Button
             android:text="REGISTER"
+            style="@style/mainButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/registerButton"
-            android:background="@drawable/button_rounded_selector"
             android:enabled="false"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
             android:lineSpacingExtra="4sp"
-            android:gravity="center"
             app:layout_constraintTop_toBottomOf="@id/passwordAgainLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/spacing_2x"
             android:layout_marginEnd="@dimen/spacing_2x"
-            android:layout_marginTop="@dimen/spacing_4x"
-            android:fontFamily="@font/karla_bold"
-            android:stateListAnimator="@null"/>
+            android:layout_marginTop="@dimen/spacing_4x"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

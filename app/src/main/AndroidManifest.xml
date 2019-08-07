@@ -17,19 +17,22 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity
-                android:name=".ShowsContainerActivity"
-                android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".login.RegisterActivity"/>
-        <activity android:name=".login.WelcomeActivity"
-                  android:noHistory="true"/>
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".SplashActivity"
+                  android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name=".ShowsContainerActivity"
+                android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".login.RegisterActivity"/>
+        <activity
+                android:name=".login.WelcomeActivity"
+                android:noHistory="true"/>
+        <activity android:name=".login.LoginActivity"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"

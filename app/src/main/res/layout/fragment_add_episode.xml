@@ -11,63 +11,14 @@
             layout="@layout/toolbar"
     />
 
-    <LinearLayout
-            android:id="@+id/addPhotoLayout"
+    <com.infinum.shows_bruno_sacaric.episodes.AddPhotoView
+            android:id="@+id/addPhotoView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:onClick="onClick"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-        <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_camera"
-                android:id="@+id/cameraImage"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
-
-        <TextView
-                android:id="@+id/uploadPhotoText"
-                android:text="Upload photo"
-                android:gravity="center_horizontal"
-                android:fontFamily="@font/karla_bold"
-                android:textSize="15sp"
-                android:lineHeight="22sp"
-                android:textColor="@color/colorAccent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/cameraImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
-        <ImageView
-                android:visibility="gone"
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
+            app:layout_constraintStart_toStartOf="parent"
         />
-
-        <TextView
-                android:visibility="gone"
-                android:id="@+id/changePhotoText"
-                android:text="Change photo"
-                android:gravity="center_horizontal"
-                android:fontFamily="@font/karla_bold"
-                android:textSize="15sp"
-                android:lineHeight="22sp"
-                android:textColor="@color/colorAccent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/cameraImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -78,7 +29,7 @@
             android:layout_marginTop="73dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            app:layout_constraintTop_toBottomOf="@id/addPhotoLayout">
+            app:layout_constraintTop_toBottomOf="@id/addPhotoView">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -140,21 +91,17 @@
 
     <Button
             android:text="SAVE"
+            style="@style/mainButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:id="@+id/SaveButton"
-            android:background="@drawable/button_rounded_selector"
             android:enabled="false"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
             android:letterSpacing="0.32"
             android:lineSpacingExtra="4sp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:fontFamily="@font/karla_bold"
-            android:stateListAnimator="@null"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
