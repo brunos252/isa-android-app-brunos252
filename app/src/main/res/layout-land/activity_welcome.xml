@@ -15,7 +15,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="158dp"
+            android:layout_marginTop="44dp"
             android:contentDescription="@string/application_logo_happy"/>
     <TextView
             style="@style/TextStyle"
@@ -37,5 +37,6 @@
             app:layout_constraintTop_toBottomOf="@+id/UInTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="85dp"/>
+            android:layout_marginTop="@dimen/spacing_2x"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

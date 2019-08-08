@@ -4,15 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.infinum.shows_bruno_sacaric.R
 import com.infinum.shows_bruno_sacaric.ShowsContainerActivity
-
+import kotlinx.android.synthetic.main.activity_welcome.*
 
 class WelcomeActivity : AppCompatActivity() {
-
-    private val handler = Handler()
 
     companion object {
         const val USERNAME = "USERNAME"
@@ -24,26 +21,28 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
+    private val handler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
-        val welcomeView = findViewById<TextView>(R.id.welcomeView)
-
-        val username: String? = intent.getStringExtra("USERNAME")
+        val username: String? = intent
+            .getStringExtra(USERNAME)
+            .split("@")[0]
+            .capitalize()
 
         if(username != null) {
-            welcomeView.text = "Welcome $username"
+            welcomeView.text = getString(R.string.welcomeText, username)
         }
 
         handler.postDelayed({
             startActivity(ShowsContainerActivity.newInstance(this))
-            finish()
-        }, 1000)
+        }, 2000)
     }
 
     override fun onStop() {
-        handler.removeCallbacksAndMessages(null)
         super.onStop()
+        handler.removeCallbacksAndMessages(null)
     }
 }

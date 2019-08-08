@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.animation.*
 import androidx.core.view.doOnLayout
@@ -13,7 +14,8 @@ import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
 
-    private val handler = Handler()
+    private var handler = Handler()
+    private var stop : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,19 +51,22 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun startNextActivity() {
-        handler.postDelayed({
-            val sharedPref = this.getSharedPreferences(TOKEN, Context.MODE_PRIVATE)
-            val token = sharedPref.getString(TOKEN, "")
-            if(sharedPref != null && token != ""){
-                startActivity(ShowsContainerActivity.newInstance(this))
-            } else {
-                startActivity(LoginActivity.newInstance(this))
-            }
-        }, 2000)
+        if(!stop) {
+            handler.postDelayed({
+                val sharedPref = this.getSharedPreferences(TOKEN, Context.MODE_PRIVATE)
+                val token = sharedPref.getString(TOKEN, "")
+                if (sharedPref != null && token != "") {
+                    startActivity(ShowsContainerActivity.newInstance(this))
+                } else {
+                    startActivity(LoginActivity.newInstance(this))
+                }
+            }, 2000)
+        }
     }
 
     override fun onStop() {
         super.onStop()
         handler.removeCallbacksAndMessages(null)
+        stop = true
     }
 }

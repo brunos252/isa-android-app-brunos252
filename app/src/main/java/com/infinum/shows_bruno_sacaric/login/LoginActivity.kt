@@ -1,5 +1,6 @@
 package com.infinum.shows_bruno_sacaric.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -21,18 +22,22 @@ const val TOKEN = "TOKEN"
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var loginViewModel: LoginViewModel
-    private var rememberMe: Boolean = false
-
     companion object {
         fun newInstance(context: Context): Intent = Intent(context, LoginActivity::class.java)
     }
 
+    private lateinit var loginViewModel: LoginViewModel
+    private var rememberMe: Boolean = false
+    private val USER_REGISTERED = 109
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProviders
+            .of(this)
+            .get(LoginViewModel::class.java)
         loginViewModel.liveData.observe(this, Observer {
             if(it.isSuccessful) {
                 if(rememberMe) {
@@ -44,61 +49,57 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(ShowsContainerActivity.newInstance(this))
                 finish()
             } else {
-                Toast.makeText(this, "login unsuccessful", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.loginFailed), Toast.LENGTH_SHORT).show()
             }
         })
 
-        var usrnmOK = false
-        var passOK = false
-        usernameLayout.isErrorEnabled = true
+        val textWatcher = object: TextWatcher {
 
-        usernameText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                usrnmOK = s.toString().isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()
+                val usrnmOK = Patterns.EMAIL_ADDRESS.matcher(usernameText.text.toString()).matches()
+                val passOK = passwordText.text.toString().length >= 5
 
-                LoginButton.isEnabled = usrnmOK && passOK
+                usernameLayout.error =
+                    if(usrnmOK || usernameText.text.isNullOrEmpty()) null
+                    else getString(R.string.invalidEmail)
 
-                if(!usrnmOK && !s.isNullOrEmpty() ){
-                    usernameLayout.error = "Invalid email"
-                } else{
-                    usernameLayout.error = null
-                }
+                passwordLayout.error =
+                    if(passOK || passwordText.text.isNullOrEmpty()) null
+                    else getString(R.string.invalidPassword)
 
+                loginButton.isEnabled = usrnmOK && passOK
             }
-        })
+        }
 
-        passwordText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                passOK = passwordText.text.toString().length >= 8
-                LoginButton.isEnabled = usrnmOK && passOK
-            }
-        })
+        usernameText.addTextChangedListener(textWatcher)
+        passwordText.addTextChangedListener(textWatcher)
 
         rememberMeCheckBox.setOnClickListener {
             val checkbox = findViewById<CheckBox>(R.id.rememberMeCheckBox)
             rememberMe = checkbox.isChecked
+            usernameLayout.clearFocus()
+            passwordLayout.clearFocus()
         }
 
-        LoginButton.setOnClickListener {
+        loginButton.setOnClickListener {
             val email = usernameText.text.toString()
             val password = passwordText.text.toString()
             loginViewModel.loginUser(User(email, password))
         }
 
         createAccountClickableText.setOnClickListener {
-            startActivity(RegisterActivity.newInstance(this))
+            startActivityForResult(RegisterActivity.newInstance(this), USER_REGISTERED)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == USER_REGISTERED && resultCode == Activity.RESULT_OK) {
+            finish()
         }
     }
 

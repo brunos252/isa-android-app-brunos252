@@ -1,101 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<include
+        layout="@layout/toolbar"
+/>
+
+<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:fillViewport="true">
 
-    <include
-            layout="@layout/toolbar"
-    />
-
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/spacing"
-            android:hint="e-mail"
-            android:id="@+id/emailLayout"
-            android:layout_marginTop="@dimen/spacing_4x"
-            android:fontFamily="@font/karla"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/editTextMargin"
-            android:layout_marginEnd="@dimen/editTextMargin">
+            android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:id="@+id/emailText"
-                android:fontFamily="@font/karla"
+                android:hint="@string/e_mail_hint"
+                android:layout_gravity="center_horizontal"
+                app:errorEnabled="true"
+                android:layout_marginTop="@dimen/spacing"
+                android:layout_marginStart="@dimen/editTextMargin"
+                android:layout_marginEnd="@dimen/editTextMargin">
 
-        />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    style="@style/editText"
+                    android:id="@+id/emailText"
+                    android:gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"/>
 
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/spacing"
-            android:hint="Password"
-            android:id="@+id/passwordLayout"
-            android:fontFamily="@font/karla"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/colorAccent"
-            app:endIconDrawable="@drawable/ic_show_password"
-            app:layout_constraintTop_toBottomOf="@+id/emailLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/editTextMargin"
-            android:layout_marginEnd="@dimen/editTextMargin">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:id="@+id/passwordText"
-                android:fontFamily="@font/karla"/>
+                android:hint="@string/password_hint"
+                android:layout_gravity="center_horizontal"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/colorAccent"
+                app:endIconDrawable="@drawable/ic_show_password"
+                app:errorEnabled="true"
+                android:layout_marginStart="@dimen/editTextMargin"
+                android:layout_marginEnd="@dimen/editTextMargin">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    style="@style/editText"
+                    android:id="@+id/passwordText"
+                    android:gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password again"
-            android:id="@+id/passwordAgainLayout"
-            android:fontFamily="@font/karla"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/colorAccent"
-            app:endIconDrawable="@drawable/ic_show_password"
-            app:layout_constraintTop_toBottomOf="@+id/passwordLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/editTextMargin"
-            android:layout_marginEnd="@dimen/editTextMargin">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordAgainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:id="@+id/passwordAgainText"
-                android:fontFamily="@font/karla"/>
+                android:hint="@string/password_again_hint"
+                android:layout_gravity="center_horizontal"
+                app:errorEnabled="true"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/colorAccent"
+                app:endIconDrawable="@drawable/ic_show_password"
+                android:layout_marginStart="@dimen/editTextMargin"
+                android:layout_marginEnd="@dimen/editTextMargin">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                    style="@style/editText"
+                    android:id="@+id/passwordAgainText"
+                    android:gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"/>
 
-    <Button
-            android:text="REGISTER"
-            style="@style/mainButton"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:id="@+id/registerButton"
-            android:enabled="false"
-            android:lineSpacingExtra="4sp"
-            app:layout_constraintTop_toBottomOf="@id/passwordAgainLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/spacing_2x"
-            android:layout_marginEnd="@dimen/spacing_2x"
-            android:layout_marginTop="@dimen/spacing_4x"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+                style="@style/mainButton"
+                android:id="@+id/registerButton"
+                android:text="@string/register_button_text"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:enabled="false"
+                android:lineSpacingExtra="4sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/spacing_4x"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                android:layout_marginBottom="@dimen/spacing"/>
+
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>

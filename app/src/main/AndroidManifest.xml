@@ -28,11 +28,13 @@
         <activity
                 android:name=".ShowsContainerActivity"
                 android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".login.RegisterActivity"/>
+        <activity android:name=".login.LoginActivity"/>
         <activity
                 android:name=".login.WelcomeActivity"
                 android:noHistory="true"/>
-        <activity android:name=".login.LoginActivity"/>
+        <activity
+                android:name=".login.RegisterActivity"
+                android:noHistory="true"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"

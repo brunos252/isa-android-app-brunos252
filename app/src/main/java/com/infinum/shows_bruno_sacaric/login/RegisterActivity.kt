@@ -1,5 +1,6 @@
 package com.infinum.shows_bruno_sacaric.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,62 +28,59 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+        registerViewModel =
+            ViewModelProviders
+            .of(this)
+            .get(RegisterViewModel::class.java)
+
         registerViewModel.liveData.observe(this, Observer {
             if(it.isSuccessful) {
-                startActivity(WelcomeActivity.newInstance(this, emailText.text.toString()))
+                val returnIntent = Intent()
+                setResult(Activity.RESULT_OK, returnIntent)
                 finish()
+                startActivity(WelcomeActivity.newInstance(this, emailText.text.toString()))
             }
             else{
-                Toast.makeText(applicationContext, "Registration failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.registrationFailed), Toast.LENGTH_SHORT).show()
             }
         })
 
-        var emailOK = false
-        var passOK = false
-        emailLayout.isErrorEnabled = true
-
-        toolbar.title = "Register"
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.title = getString(R.string.Register)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_gray_24dp)
         toolbar.setNavigationOnClickListener {
             super.onBackPressed()
         }
 
-        emailText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+        val textWatcher = object: TextWatcher {
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                emailOK = s.toString().isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()
-
-                registerButton.isEnabled = emailOK && passOK
-
-                if(!emailOK && !s.isNullOrEmpty() ){
-                    emailLayout.error = "Invalid email"
-                } else{
-                    emailLayout.error = null
-                }
-
-            }
-        })
-
-        passwordAgainText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                passOK = passwordText.text.toString().length >= 8 &&
-                        passwordText.text.toString() == passwordAgainText.text.toString()
-                registerButton.isEnabled = emailOK && passOK
-            }
+                val emailOK = Patterns.EMAIL_ADDRESS.matcher(emailText.text.toString()).matches()
+                val passOK = passwordText.text.toString().length >= 5
+                val passAgainOK = passwordText.text.toString() == passwordAgainText.text.toString()
 
-        })
+                emailLayout.error =
+                    if(emailOK || emailText.text.isNullOrEmpty()) null
+                    else getString(R.string.invalidEmail)
+
+                passwordLayout.error =
+                    if(passOK || passwordText.text.isNullOrEmpty()) null
+                    else getString(R.string.invalidPassword)
+
+                passwordAgainLayout.error =
+                    if(passAgainOK || passwordAgainText.text.isNullOrEmpty()) null
+                    else getString(R.string.invalidRepeatPassword)
+
+                registerButton.isEnabled = emailOK && passOK && passAgainOK
+            }
+        }
+
+        emailText.addTextChangedListener(textWatcher)
+        passwordText.addTextChangedListener(textWatcher)
+        passwordAgainText.addTextChangedListener(textWatcher)
 
         registerButton.setOnClickListener {
             val email = emailText.text.toString()
@@ -91,5 +89,5 @@ class RegisterActivity : AppCompatActivity() {
             registerViewModel.registerUser(user)
         }
     }
-
 }
+

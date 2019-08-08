@@ -14,14 +14,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:translationY="-300dp"/>
+                android:translationY="-300dp"
+                android:contentDescription="@string/application_logo"/>
 
         <TextView
                 android:id="@+id/showsTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="shows"
+                android:text="@string/app_name_shows"
                 android:textColor="#000000"
                 android:visibility="gone"
                 android:layout_gravity="center_horizontal"

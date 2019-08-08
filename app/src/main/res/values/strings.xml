@@ -6,7 +6,25 @@
         regenerates into a new form (which is how the series has been running since the departure of the original actor,
         William Hartnell, in 1966).
     </string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Register">Register</string>
+    <string name="invalidEmail">Invalid e-mail</string>
+    <string name="invalidPassword">Password has to contain at least 5 characters</string>
+    <string name="invalidRepeatPassword">Password doesn\'t match</string>
+    <string name="registrationFailed">Registration failed</string>
+    <string name="loginFailed">Login failed</string>
+    <string name="welcomeText">Welcome %1$s</string>
+    <string name="application_logo">Application logo</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="remember_me_text">Remember me</string>
+    <string name="login_button_text">LOG IN</string>
+    <string name="or_text">or</string>
+    <string name="create_account_text">Create an account</string>
+    <string name="e_mail_hint">e-mail</string>
+    <string name="password_again_hint">Password again</string>
+    <string name="register_button_text">REGISTER</string>
+    <string name="welcome_default_text">Welcome user</string>
+    <string name="you_re_in_text">You\'re in!</string>
+    <string name="application_logo_happy">Happy app logo</string>
+    <string name="app_name_shows">shows</string>
 </resources>

@@ -53,7 +53,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
             activity?.resources?.configuration?.smallestScreenWidthDp!! >= 600) {
             toolbar.navigationIcon = null
         } else {
-            toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_black_24dp)
+            toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_gray_24dp)
         }
 
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
