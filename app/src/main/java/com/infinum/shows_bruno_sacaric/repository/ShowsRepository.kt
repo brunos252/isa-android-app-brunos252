@@ -12,8 +12,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val FILENAME = "shows"
-
 object ShowsRepository {
 
     private val apiService = RetrofitClient.retrofitInstance?.create(Api::class.java)

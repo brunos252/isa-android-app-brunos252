@@ -20,9 +20,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProviders
 import com.infinum.shows_bruno_sacaric.R
-import kotlinx.android.synthetic.main.add_photo_dialog.*
+import kotlinx.android.synthetic.main.dialog_add_photo.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
-import kotlinx.android.synthetic.main.number_picker_dialog.*
+import kotlinx.android.synthetic.main.dialog_number_picker.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_add_photo.*
 import java.io.File
@@ -64,10 +64,10 @@ class AddEpisodeFragment : Fragment() {
 
         numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
 
-        val index = arguments?.getInt(SHOW_KEY, 1)
+        //val index = arguments?.getInt(SHOW_KEY, 1)
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
         toolbar.title = "Add episode"
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_gray_24dp)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_gray)
         toolbar.setNavigationOnClickListener {
             fragmentManager?.popBackStack()
         }
@@ -84,17 +84,23 @@ class AddEpisodeFragment : Fragment() {
             }
         }
 
-        titleText.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+        val textWatcher = object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                SaveButton.isEnabled = !s.isNullOrEmpty()
+                saveButtonCheckState()
+                descLayout.error =
+                    if(descText.text.toString().length >= 50 || descText.text.isNullOrEmpty()) null
+                    else getString(R.string.invalidDescription)
+
             }
-        })
+        }
+
+        titleText.addTextChangedListener(textWatcher)
+        descText.addTextChangedListener(textWatcher)
+
         addPhotoView.setOnClickListener {
             showPhotoDialog()
         }
@@ -103,14 +109,16 @@ class AddEpisodeFragment : Fragment() {
             showNpDialog()
         }
 
-        /*SaveButton.setOnClickListener {
-            viewModel.addEpisode(
-                Episode(
-                    titleText.text.toString(), descText.text.toString(), seasonNumber, episodeNumber
-                )
-            )
+        SaveButton.setOnClickListener {
+            //TODO
             fragmentManager?.popBackStack()
-        }*/
+        }
+    }
+
+    fun saveButtonCheckState() {
+        SaveButton.isEnabled = !titleText.text.isNullOrEmpty()
+                && descText.text.toString().length >= 50
+                && currentPhotoPath != ""
     }
 
     fun onCameraClick(){
@@ -215,7 +223,7 @@ class AddEpisodeFragment : Fragment() {
             imageView.setImageURI(data?.getData())
             addPhotoView.photoAdded()
         }
-
+        saveButtonCheckState()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -248,7 +256,7 @@ class AddEpisodeFragment : Fragment() {
 
     fun showNpDialog(){
         val npDialog = Dialog(requireContext())
-        npDialog.setContentView(R.layout.number_picker_dialog)
+        npDialog.setContentView(R.layout.dialog_number_picker)
 
         val np1 = npDialog.numberPicker1
         val np2 = npDialog.numberPicker2
@@ -276,7 +284,7 @@ class AddEpisodeFragment : Fragment() {
 
     fun showPhotoDialog(){
         photoDialog = Dialog(requireContext())
-        photoDialog?.setContentView(R.layout.add_photo_dialog)
+        photoDialog?.setContentView(R.layout.dialog_add_photo)
         photoDialog?.show()
 
 

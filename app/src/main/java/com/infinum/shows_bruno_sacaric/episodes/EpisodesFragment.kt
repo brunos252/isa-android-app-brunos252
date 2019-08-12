@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.infinum.shows_bruno_sacaric.FragmentActionListener
 import com.infinum.shows_bruno_sacaric.R
 import kotlinx.android.synthetic.main.fragment_episodes.*
+import kotlinx.android.synthetic.main.fragment_episodes.emptyView
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.view_empty_state.*
 
 const val SHOW_KEY = "key"
 
@@ -53,7 +55,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
             activity?.resources?.configuration?.smallestScreenWidthDp!! >= 600) {
             toolbar.navigationIcon = null
         } else {
-            toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_gray_24dp)
+            toolbar.navigationIcon = context?.getDrawable(R.drawable.ic_arrow_back_gray)
         }
 
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
@@ -67,6 +69,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
                     with(showDetails.show) {
                         toolbar.title = name
                         showDesc.text = description
+                        likeCount.text = likesCount.toString()
                     }
                 }
                 if(showDetails.episodes.isNullOrEmpty()){
@@ -90,7 +93,19 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.onEpisodeClicked {
             listener?.backPress()
         }
 
-        clickableText.setOnClickListener {
+        dislikeButton.setOnClickListener {
+            dislikeButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_dislike_pressed))
+            likeButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_like_outline))
+            //TODO
+        }
+
+        likeButton.setOnClickListener {
+            likeButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_like_pressed))
+            dislikeButton.setImageDrawable(requireContext().getDrawable(R.drawable.ic_dislike_outline))
+            //TODO
+        }
+
+        addEpisodesText.setOnClickListener {
             listener?.addEpisodeClick(arguments?.getInt(SHOW_KEY)!!)
         }
 

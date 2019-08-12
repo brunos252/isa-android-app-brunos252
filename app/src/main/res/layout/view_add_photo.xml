@@ -3,28 +3,28 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content">
+              android:layout_height="160dp">
     <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_camera"
             android:id="@+id/cameraImage"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/spacing"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/spacing"
+            android:layout_marginTop="@dimen/spacing_4x"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
     <TextView
             android:id="@+id/uploadPhotoText"
-            android:text="Upload photo"
+            android:text="@string/upload_photo_view_text"
             android:gravity="center_horizontal"
             android:fontFamily="@font/karla_bold"
             android:textSize="15sp"
             android:lineHeight="22sp"
             android:textColor="@color/colorAccent"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/spacing"
             app:layout_constraintTop_toBottomOf="@id/cameraImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -35,12 +35,12 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-    />
+            android:contentDescription="@string/episode_picture_desc"/>
 
     <TextView
             android:visibility="gone"
             android:id="@+id/changePhotoText"
-            android:text="Change photo"
+            android:text="@string/change_photo_view_text"
             android:gravity="center_horizontal"
             android:fontFamily="@font/karla_bold"
             android:textSize="15sp"

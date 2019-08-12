@@ -1,18 +1,18 @@
 package com.infinum.shows_bruno_sacaric.repository
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.infinum.shows_bruno_sacaric.network.Api
 import com.infinum.shows_bruno_sacaric.network.RetrofitClient
 import com.infinum.shows_bruno_sacaric.network.models.LoginResponse
 import com.infinum.shows_bruno_sacaric.network.models.RegisterResponse
-import com.infinum.shows_bruno_sacaric.network.models.RegisterResponseData
 import com.infinum.shows_bruno_sacaric.network.models.User
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+const val TOKEN = "TOKEN"
 
 object LoginRepository {
 
@@ -42,7 +42,7 @@ object LoginRepository {
                                 data = body()?.data,
                                 isSuccessful = true
                             )
-                        loginUser(user)
+                        loginUser(user, false)
                     } else {
                         registerResponseLiveData.value = RegisterResponse(isSuccessful = false, data = null)
                     }
@@ -51,7 +51,7 @@ object LoginRepository {
         })
     }
 
-    fun loginUser(user: User) {
+    fun loginUser(user: User, rememberMe: Boolean, appContext: Context? = null) {
         apiService?.loginUser(user)?.enqueue(object : Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 loginResponseLiveData.value = LoginResponse(data = null, isSuccessful = false)
@@ -65,12 +65,27 @@ object LoginRepository {
                                 data = body()?.data,
                                 isSuccessful = true
                             )
+                        if (rememberMe && appContext != null) rememberLogin(body()?.data?.token, appContext)
                     } else {
                         loginResponseLiveData.value = LoginResponse(data = null, isSuccessful = false)
                     }
                 }
             }
         })
+    }
 
+    fun rememberLogin(token: String?, appContext: Context) {
+        with(appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE).edit()) {
+            putString(TOKEN, token)
+            apply()
         }
     }
+
+    fun logoutUser(appContext: Context) {
+        with(appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE).edit()) {
+            remove(TOKEN)
+            apply()
+        }
+        loginResponseLiveData.value = LoginResponse(data = null, isSuccessful = false)
+    }
+}

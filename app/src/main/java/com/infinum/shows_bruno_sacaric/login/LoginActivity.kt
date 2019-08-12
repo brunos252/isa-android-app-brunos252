@@ -18,8 +18,6 @@ import com.infinum.shows_bruno_sacaric.network.models.User
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.passwordText
 
-const val TOKEN = "TOKEN"
-
 class LoginActivity : AppCompatActivity() {
 
     companion object {
@@ -39,13 +37,7 @@ class LoginActivity : AppCompatActivity() {
             .of(this)
             .get(LoginViewModel::class.java)
         loginViewModel.liveData.observe(this, Observer {
-            if(it.isSuccessful) {
-                if(rememberMe) {
-                    with(this.getSharedPreferences(TOKEN, Context.MODE_PRIVATE).edit()) {
-                        putString(TOKEN, it.data?.token)
-                        apply()
-                    }
-                }
+            if(it) {
                 startActivity(ShowsContainerActivity.newInstance(this))
                 finish()
             } else {
@@ -88,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             val email = usernameText.text.toString()
             val password = passwordText.text.toString()
-            loginViewModel.loginUser(User(email, password))
+            loginViewModel.loginUser(User(email, password), rememberMe)
         }
 
         createAccountClickableText.setOnClickListener {

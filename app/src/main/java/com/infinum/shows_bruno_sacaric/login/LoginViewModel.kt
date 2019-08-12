@@ -1,31 +1,29 @@
 package com.infinum.shows_bruno_sacaric.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.infinum.shows_bruno_sacaric.network.models.LoginResponse
 import com.infinum.shows_bruno_sacaric.network.models.User
 import com.infinum.shows_bruno_sacaric.repository.LoginRepository
 
-class LoginViewModel : ViewModel(), Observer<LoginResponse> {
+class LoginViewModel(application: Application) : AndroidViewModel(application), Observer<LoginResponse> {
 
-    private val loginResponseLiveData = MutableLiveData<LoginResponse>()
+    private val loginLiveData = MutableLiveData<Boolean>()
 
-    val liveData: LiveData<LoginResponse> get() {
-        return loginResponseLiveData
+    val liveData: LiveData<Boolean> get() {
+        return loginLiveData
     }
 
     init{
         LoginRepository.loginLiveData().observeForever(this)
     }
 
-    fun loginUser(user: User) {
-        LoginRepository.loginUser(user)
+    fun loginUser(user: User, rememberMe: Boolean) {
+        LoginRepository.loginUser(user, rememberMe, this.getApplication())
     }
 
-    override fun onChanged(loginResponseData: LoginResponse?) {
-        loginResponseLiveData.value = loginResponseData
+    override fun onChanged(tokenData: LoginResponse?) {
+        loginLiveData.value = tokenData?.data != null
     }
 
     override fun onCleared() {

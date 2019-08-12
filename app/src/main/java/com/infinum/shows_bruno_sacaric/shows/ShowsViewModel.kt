@@ -1,13 +1,12 @@
 package com.infinum.shows_bruno_sacaric.shows
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.infinum.shows_bruno_sacaric.network.models.ShowListResponse
+import com.infinum.shows_bruno_sacaric.repository.LoginRepository
 import com.infinum.shows_bruno_sacaric.repository.ShowsRepository
 
-class ShowsViewModel : ViewModel(), Observer<ShowListResponse> {
+class ShowsViewModel(application: Application) : AndroidViewModel(application), Observer<ShowListResponse> {
 
     private val showsListLiveData = MutableLiveData<ShowListResponse>()
 
@@ -18,6 +17,10 @@ class ShowsViewModel : ViewModel(), Observer<ShowListResponse> {
 
     init {
         ShowsRepository.showsListLiveData().observeForever(this)
+    }
+
+    fun logout() {
+        LoginRepository.logoutUser(this.getApplication())
     }
 
     override fun onChanged(shows: ShowListResponse?) {

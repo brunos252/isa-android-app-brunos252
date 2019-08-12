@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.infinum.shows_bruno_sacaric.episodes.AddEpisodeFragment
 import com.infinum.shows_bruno_sacaric.episodes.EpisodesFragment
+import com.infinum.shows_bruno_sacaric.login.LoginActivity
 import com.infinum.shows_bruno_sacaric.shows.ShowsFragment
 import kotlinx.android.synthetic.main.activity_shows_container.*
 
@@ -57,6 +58,11 @@ class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
 
     override fun backPress() =
         this.onBackPressed()
+
+    override fun logoutStartActivity() {
+        startActivity(LoginActivity.newInstance(this))
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,4 +118,5 @@ interface FragmentActionListener {
     fun addEpisodeClick(index: Int)
     fun deselectShow()
     fun backPress()
+    fun logoutStartActivity()
 }

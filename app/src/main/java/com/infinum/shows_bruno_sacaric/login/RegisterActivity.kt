@@ -46,7 +46,7 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         toolbar.title = getString(R.string.Register)
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_gray_24dp)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_gray)
         toolbar.setNavigationOnClickListener {
             super.onBackPressed()
         }
