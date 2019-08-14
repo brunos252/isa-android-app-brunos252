@@ -3,7 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
             android:background="#fff"
             android:clickable="true"
@@ -63,7 +64,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="@dimen/spacing"
                     android:layout_marginEnd="24dp"
-                    android:text="@string/doctorWhoDesc"
+                    tools:text="@string/doctorWhoDesc"
                     android:fontFamily="@font/karla"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -76,7 +77,7 @@
 
             <TextView
                     android:id="@+id/episodesText"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="@color/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -91,6 +92,7 @@
                     android:id="@+id/recyclerViewEp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:layout_marginTop="16dp"/>
 
             <include
@@ -98,7 +100,7 @@
                     android:id="@+id/emptyView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
         </LinearLayout>
 
@@ -109,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_fab_plus_white"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="@dimen/editTextMargin"
             android:layout_marginBottom="25dp"

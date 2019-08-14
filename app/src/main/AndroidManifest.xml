@@ -3,6 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.infinum.shows_bruno_sacaric">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -11,13 +12,13 @@
     <application
             android:name=".MyInfinumApp"
             android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/ic_shows_launcher"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/ic_shows_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SplashActivity"
+        <activity android:name=".ui.SplashActivity"
                   android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -26,14 +27,14 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".ShowsContainerActivity"
-                android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".login.LoginActivity"/>
+                android:name=".ui.ShowsContainerActivity"
+                android:windowSoftInputMode="adjustResize"/>
+        <activity android:name="com.infinum.shows_bruno_sacaric.ui.login.LoginActivity"/>
         <activity
-                android:name=".login.WelcomeActivity"
+                android:name="com.infinum.shows_bruno_sacaric.ui.login.WelcomeActivity"
                 android:noHistory="true"/>
         <activity
-                android:name=".login.RegisterActivity"
+                android:name="com.infinum.shows_bruno_sacaric.ui.login.RegisterActivity"
                 android:noHistory="true"/>
 
         <provider

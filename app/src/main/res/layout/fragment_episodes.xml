@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools" android:background="#fff"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="#fff"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +27,6 @@
             android:fontFamily="@font/karla_bold"
             android:textSize="16sp"
             android:textColor="#de000000"
-            android:text="128"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/spacing"
             android:layout_marginEnd="24dp"
-            android:text="@string/doctorWhoDesc"
+            tools:text="@string/doctorWhoDesc"
             android:fontFamily="@font/karla"/>
 
     <TextView
@@ -75,6 +75,7 @@
             android:id="@+id/recyclerViewEp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +87,7 @@
             android:id="@+id/emptyView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/episodesText"
@@ -97,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_fab_plus_white"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="22dp"

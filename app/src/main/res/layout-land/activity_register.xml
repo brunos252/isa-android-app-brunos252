@@ -46,7 +46,7 @@
                     android:hint="@string/password_hint"
                     android:layout_gravity="center_horizontal"
                     app:endIconMode="password_toggle"
-                    app:endIconTint="@color/colorAccent"
+                    app:endIconTint="@color/colorPrimary"
                     app:endIconDrawable="@drawable/ic_show_password"
                     app:errorEnabled="true">
 
@@ -68,7 +68,7 @@
                     android:layout_gravity="center_horizontal"
                     app:errorEnabled="true"
                     app:endIconMode="password_toggle"
-                    app:endIconTint="@color/colorAccent"
+                    app:endIconTint="@color/colorPrimary"
                     app:endIconDrawable="@drawable/ic_show_password">
 
                 <com.google.android.material.textfield.TextInputEditText

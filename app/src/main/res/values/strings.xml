@@ -42,4 +42,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="unexpectedResponseError">Unexpected response code</string>
+    <string name="api_error_message">Terribly sorry, something went wrong</string>
+    <string name="Close">Close</string>
+    <string name="Comments">Comments</string>
 </resources>

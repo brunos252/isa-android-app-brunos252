@@ -1,15 +1,16 @@
 package com.infinum.shows_bruno_sacaric.network.models
 
+import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EpisodeCommentsResponse(
     @Json(name = "data")
-    val episodes: List<EpisodeComment>?,
+    val comments: List<EpisodeComment>?,
 
     @Transient
-    var isSuccessful: Boolean = true
+    var responseCode: ResponseCode = ResponseCode.CODE_EMPTY
 )
 
 @JsonClass(generateAdapter = true)

@@ -30,7 +30,7 @@
             android:id="@+id/addEpisodesText"
             android:layout_marginTop="7sp"
             android:fontFamily="@font/karla_bold"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="15sp"
             android:lineHeight="22sp"
             android:lineSpacingExtra="7sp"
