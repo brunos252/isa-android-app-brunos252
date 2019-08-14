@@ -8,11 +8,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.infinum.shows_bruno_sacaric.BaseActivity
 import com.infinum.shows_bruno_sacaric.R
 import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode.*
 import com.infinum.shows_bruno_sacaric.network.models.User
@@ -20,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.lang.Exception
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
 
     companion object {
         fun newInstance(context: Context): Intent = Intent(context, RegisterActivity::class.java)

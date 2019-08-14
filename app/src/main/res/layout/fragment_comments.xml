@@ -41,7 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="@dimen/spacing_2x"
-                app:srcCompat="@drawable/ic_img_placehoder_comments"/>
+                app:srcCompat="@drawable/ic_img_placehoder_comments"
+                android:contentDescription="@string/empty_view_comments_description"/>
 
         <TextView
                 android:id="@+id/emptyViewCommentsText"
@@ -52,17 +53,11 @@
                 android:lineHeight="22sp"
                 android:lineSpacingExtra="7sp"
                 android:gravity="center_horizontal"
-                android:text="Sorry, we don't have comments yet.\nBe first who will write a review."
+                android:text="@string/empty_state_comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
-    <!--<com.infinum.shows_bruno_sacaric.episode_details.CommentTextView
-            android:id="@+id/commentTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/commentTextView"
@@ -76,7 +71,7 @@
 
         <EditText
                 android:id="@+id/comment"
-                android:hint="Add a comment..."
+                android:hint="@string/comment_hint"
                 android:textColorHint="#9aa2a6"
                 android:layout_marginStart="@dimen/spacing_2x"
                 android:layout_marginEnd="@dimen/spacing"
@@ -95,7 +90,7 @@
 
         <TextView
                 android:id="@+id/postButton"
-                android:text="Post"
+                android:text="@string/post"
                 android:gravity="center_vertical|end"
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"

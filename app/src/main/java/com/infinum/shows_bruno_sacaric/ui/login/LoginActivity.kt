@@ -10,9 +10,9 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.infinum.shows_bruno_sacaric.BaseActivity
 import com.infinum.shows_bruno_sacaric.R
 import com.infinum.shows_bruno_sacaric.ui.ShowsContainerActivity
 import com.infinum.shows_bruno_sacaric.network.models.User
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_login.passwordText
 import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode.*
 import java.lang.Exception
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         fun newInstance(context: Context): Intent = Intent(context, LoginActivity::class.java)

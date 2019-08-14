@@ -4,26 +4,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.infinum.shows_bruno_sacaric.network.Api
 import com.infinum.shows_bruno_sacaric.network.RetrofitClient
-import com.infinum.shows_bruno_sacaric.network.models.Comment
-import com.infinum.shows_bruno_sacaric.network.models.CommentResponse
-import com.infinum.shows_bruno_sacaric.network.models.EpisodeCommentsResponse
-import com.infinum.shows_bruno_sacaric.network.models.EpisodeResponse
 import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode.*
+import com.infinum.shows_bruno_sacaric.network.models.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 object EpisodesRepository {
 
     private val apiService = RetrofitClient.retrofitInstance?.create(Api::class.java)
     private val episodeDetailLiveData = MutableLiveData<EpisodeResponse>()
     private val commentsLiveData = MutableLiveData<EpisodeCommentsResponse>()
+    private val postEpisodeLiveData = MutableLiveData<ResponseCode>()
 
     fun episodeDetailLiveData() : LiveData<EpisodeResponse> =
         episodeDetailLiveData
 
     fun commentsLiveData() : LiveData<EpisodeCommentsResponse> =
         commentsLiveData
+
+    fun postEpisodeLiveData() : LiveData<ResponseCode> =
+        postEpisodeLiveData
 
     fun getEpisodeDetails(episodeId: String) {
         apiService?.getEpisode(episodeId)?.enqueue(object : Callback<EpisodeResponse> {
@@ -79,6 +83,51 @@ object EpisodesRepository {
                     }
                 }
             }
+        })
+    }
+
+    fun addEpisode(episode: EpisodeUpload, photo: File) {
+        val token = LoginRepository.tokenLiveData().value ?: return
+        apiService?.uploadMedia(token, RequestBody.create(MediaType.parse("image/jpg"), photo))
+            ?.enqueue(object: Callback<MediaResponse> {
+            override fun onFailure(call: Call<MediaResponse>, t: Throwable) {
+                postEpisodeLiveData.value = CODE_FAILED
+            }
+
+            override fun onResponse(call: Call<MediaResponse>, response: Response<MediaResponse>) {
+                with(response) {
+                    if(isSuccessful && body() != null) {
+                        postEpisode(EpisodeUpload(
+                            episode.showId, body()?.data?.id!!, episode.title,
+                            episode.description, episode.episode, episode.season
+                        ))
+                    } else {
+                        postEpisodeLiveData.value = CODE_NO_BODY
+                    }
+                }
+            }
+
+        })
+    }
+
+    fun postEpisode(episode: EpisodeUpload) {
+        val token = LoginRepository.tokenLiveData().value ?: return
+        apiService?.postEpisode(token, episode)?.enqueue(object : Callback<EpisodeUploadResponse> {
+            override fun onFailure(call: Call<EpisodeUploadResponse>, t: Throwable) {
+                postEpisodeLiveData.value = CODE_FAILED
+            }
+
+            override fun onResponse(call: Call<EpisodeUploadResponse>, response: Response<EpisodeUploadResponse>) {
+                with(response) {
+                    if(isSuccessful && body() != null) {
+                        ShowsRepository.getEpisodes(episode.showId)
+                        postEpisodeLiveData.value = CODE_OK
+                    } else {
+                        postEpisodeLiveData.value = CODE_NO_BODY
+                    }
+                }
+            }
+
         })
     }
 }

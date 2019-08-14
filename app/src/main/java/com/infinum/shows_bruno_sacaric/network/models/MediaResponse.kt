@@ -1,5 +1,6 @@
 package com.infinum.shows_bruno_sacaric.network.models
 
+import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -9,7 +10,7 @@ data class MediaResponse(
     val data: MediaResponseData,
 
     @Transient
-    var isSuccessful: Boolean = true
+    var responseCode: ResponseCode = ResponseCode.CODE_EMPTY
 )
 
 @JsonClass(generateAdapter = true)

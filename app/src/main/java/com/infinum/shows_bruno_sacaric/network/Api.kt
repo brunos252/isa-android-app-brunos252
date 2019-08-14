@@ -46,6 +46,7 @@ interface Api {
 
     @POST("/api/media")
     @Multipart
-    fun uploadMedia(@Part("file\"; filename=\"image.jpg\"") request: RequestBody) :
+    fun uploadMedia(@Header("Authorization") token: String,
+                    @Part("file\"; filename=\"image.jpg\"") request: RequestBody) :
             Call<MediaResponse>
 }

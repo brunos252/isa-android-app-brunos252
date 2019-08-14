@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_episodes.emptyView
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_empty_state.*
 import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode.*
-import java.lang.RuntimeException
 
 const val SHOW_KEY = "key"
 
@@ -49,6 +47,7 @@ class EpisodesFragment : Fragment(),
     private lateinit var viewModel: EpisodesViewModel
     private var adapter = EpisodesAdapter(this)
     private var likeStatus : Boolean? = null
+    private var likes : Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,6 +80,7 @@ class EpisodesFragment : Fragment(),
                     toolbar.title = show?.name
                     showDesc.text = show?.description
                     likeCount.text = show?.likesCount.toString()
+                    likes = show?.likesCount.toString().toInt()
                     if(!episodes.isNullOrEmpty()) {
                         adapter.setData(episodes)
                         emptyView.visibility = View.GONE
@@ -102,18 +102,18 @@ class EpisodesFragment : Fragment(),
         }
 
         dislikeButton.setOnClickListener {
-            if(likeStatus == true)
+            if(likeStatus == true) {
                 likeCount.text = (likeCount.text.toString().toInt() - 1).toString()
-
+            }
             changeLikedState(false)
             viewModel.setLikedStatus(false)
 
         }
 
         likeButton.setOnClickListener {
-            if(likeStatus == false)
+            if(likeStatus == false || likeStatus == null) {
                 likeCount.text = (likeCount.text.toString().toInt() + 1).toString()
-
+            }
             changeLikedState(true)
             viewModel.setLikedStatus(true)
         }

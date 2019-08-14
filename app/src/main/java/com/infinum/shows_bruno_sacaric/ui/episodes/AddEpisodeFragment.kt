@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -27,8 +28,6 @@ import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.view_add_photo.*
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 
 const val MY_CAMERA_PERMISSION = 707
 const val MY_READ_PERMISSION = 606
@@ -36,6 +35,11 @@ const val MY_READ_PERMISSION = 606
 const val SEASON = "SEASON"
 const val EPISODE = "EPISODE"
 const val PHOTO_PATH = "PHOTO_PATH"
+const val DESC_MIN_LENGTH = 50
+const val SEASON_MIN_VALUE = 1
+const val SEASON_MAX_VALUE = 20
+const val EPISODE_MIN_VALUE = 1
+const val EPISODE_MAX_VALUE = 99
 
 class AddEpisodeFragment : Fragment() {
 
@@ -52,6 +56,7 @@ class AddEpisodeFragment : Fragment() {
 
     var photoDialog: Dialog? = null
     var currentPhotoPath: String = ""
+    lateinit var mediaFile: File
 
     private lateinit var viewModel: EpisodesViewModel
 
@@ -64,9 +69,8 @@ class AddEpisodeFragment : Fragment() {
 
         numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
 
-        //val index = arguments?.getInt(SHOW_KEY, 1)
         viewModel = ViewModelProviders.of(activity!!).get(EpisodesViewModel::class.java)
-        toolbar.title = "Add episode"
+        toolbar.title = getString(R.string.add_episode)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_gray)
         toolbar.setNavigationOnClickListener {
             fragmentManager?.popBackStack()
@@ -92,7 +96,7 @@ class AddEpisodeFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 saveButtonCheckState()
                 descLayout.error =
-                    if(descText.text.toString().length >= 50 || descText.text.isNullOrEmpty()) null
+                    if(descText.text.toString().length >= DESC_MIN_LENGTH || descText.text.isNullOrEmpty()) null
                     else getString(R.string.invalidDescription)
 
             }
@@ -110,18 +114,19 @@ class AddEpisodeFragment : Fragment() {
         }
 
         SaveButton.setOnClickListener {
-            //TODO
+            viewModel.addEpisode(mediaFile, titleText.text.toString(),
+                descText.text.toString(), seasonNumber.toString(), episodeNumber.toString())
             fragmentManager?.popBackStack()
         }
     }
 
     fun saveButtonCheckState() {
         SaveButton.isEnabled = !titleText.text.isNullOrEmpty()
-                && descText.text.toString().length >= 50
-                && currentPhotoPath != ""
+                && descText.text.toString().length >= DESC_MIN_LENGTH
+                //&& currentPhotoPath != ""
     }
 
-    fun onCameraClick(){
+    private fun onCameraClick(){
 
         val permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
@@ -132,25 +137,25 @@ class AddEpisodeFragment : Fragment() {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.CAMERA)) {
                 val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Permission").setMessage("Camera is needed to take a photo, storage to keep it")
-                    .setPositiveButton("OK"){_, _ ->
+                builder
+                    .setTitle(getString(R.string.dialog_permission_title))
+                    .setMessage(getString(R.string.dialog_permission_camera_message))
+                    .setPositiveButton(getString(R.string.OK)){ _, _ ->
                         requestPermissions(permissions,
                             MY_CAMERA_PERMISSION
                         )
-
                     }.show()
             } else {
                 requestPermissions(permissions,
                     MY_CAMERA_PERMISSION
                 )
-
             }
         } else {
             openCamera()
         }
     }
 
-    fun onGalleryClick(){
+    private fun onGalleryClick(){
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -158,8 +163,10 @@ class AddEpisodeFragment : Fragment() {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Permission").setMessage("storage is where your photos are")
-                    .setPositiveButton("OK"){_, _ ->
+                builder
+                    .setTitle(getString(R.string.dialog_permission_title))
+                    .setMessage(getString(R.string.dialog_permission_gallery_message))
+                    .setPositiveButton(getString(R.string.OK)){_, _ ->
                         requestPermissions(permissions,
                             MY_READ_PERMISSION
                         )
@@ -174,7 +181,7 @@ class AddEpisodeFragment : Fragment() {
         }
     }
 
-    fun openCamera(){
+    private fun openCamera(){
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
                 val photoFile: File? = try {
@@ -186,71 +193,81 @@ class AddEpisodeFragment : Fragment() {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         requireContext(),
                         "com.sajo.android.fileprovider",
-                        it
-                    )
+                        it)
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent,
                         MY_CAMERA_PERMISSION
                     )
-                    photoDialog?.dismiss()
                 }
+                mediaFile = photoFile!!
             }
         }
     }
 
-    fun openGallery(){
+    private fun openGallery(){
         val intent = Intent(Intent.ACTION_PICK)
+        createImageFile()
         intent.type = "image/*"
         val mimeTypes = arrayOf("image/jpeg", "image/png")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         startActivityForResult(intent, MY_READ_PERMISSION)
-        photoDialog?.dismiss()
     }
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
+        mediaFile = File(
+            storageDir,
+            "image.jpg"
         ).apply {
             currentPhotoPath = absolutePath
         }
+        return mediaFile
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        photoDialog?.dismiss()
         if(requestCode == MY_CAMERA_PERMISSION && resultCode == Activity.RESULT_OK){
             val imageUri = Uri.parse(currentPhotoPath)
             imageView.setImageURI(imageUri)
             addPhotoView.photoAdded()
 
         } else if(requestCode == MY_READ_PERMISSION && resultCode == Activity.RESULT_OK){
-            currentPhotoPath = data?.getData().toString()
-            imageView.setImageURI(data?.getData())
+            currentPhotoPath = data?.data.toString()
+            imageView.setImageURI(data?.data)
+            File(getAbsolutePath(data?.data!!)).copyTo(mediaFile, true)
             addPhotoView.photoAdded()
         }
         saveButtonCheckState()
     }
 
+    fun getAbsolutePath(uri: Uri) : String? {
+        val filePath = arrayOf(MediaStore.Audio.Media.DATA)
+        val cursor: Cursor? = context?.contentResolver
+            ?.query(uri, filePath, null, null, null)
+        assert(cursor != null)
+        cursor?.moveToFirst()
+        val index: Int? = cursor?.getColumnIndex(filePath[0])
+        val path = if(index != null) cursor.getString(index) else ""
+        if(cursor != null)
+            cursor.close()
+        return path
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        photoDialog?.dismiss()
         when(requestCode){
             MY_CAMERA_PERMISSION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]
                     == PackageManager.PERMISSION_GRANTED){
                     openCamera()
-                } else{
-                    photoDialog?.dismiss()
                 }
             }
             MY_READ_PERMISSION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     openGallery()
-                } else{
-                    photoDialog?.dismiss()
                 }
             }
         }
@@ -270,12 +287,12 @@ class AddEpisodeFragment : Fragment() {
         val np1 = npDialog.numberPicker1
         val np2 = npDialog.numberPicker2
 
-        np1.minValue = 1
-        np1.maxValue = 20
+        np1.minValue = SEASON_MIN_VALUE
+        np1.maxValue = SEASON_MAX_VALUE
         np1.wrapSelectorWheel = false
 
-        np2.minValue = 1
-        np2.maxValue = 99
+        np2.minValue = EPISODE_MIN_VALUE
+        np2.maxValue = EPISODE_MAX_VALUE
         np2.wrapSelectorWheel = false
 
         np1.value = seasonNumber
@@ -295,7 +312,6 @@ class AddEpisodeFragment : Fragment() {
         photoDialog = Dialog(requireContext())
         photoDialog?.setContentView(R.layout.dialog_add_photo)
         photoDialog?.show()
-
 
         photoDialog?.cameraText?.setOnClickListener {
             onCameraClick()

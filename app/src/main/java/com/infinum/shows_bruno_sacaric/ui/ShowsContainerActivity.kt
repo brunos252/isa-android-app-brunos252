@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import androidx.appcompat.app.AppCompatActivity
+import com.infinum.shows_bruno_sacaric.BaseActivity
 import com.infinum.shows_bruno_sacaric.R
 import com.infinum.shows_bruno_sacaric.ui.episode_details.CommentsFragment
 import com.infinum.shows_bruno_sacaric.ui.episode_details.EpisodeDetailsFragment
@@ -16,7 +16,7 @@ import com.infinum.shows_bruno_sacaric.ui.login.LoginActivity
 import com.infinum.shows_bruno_sacaric.ui.shows.ShowsFragment
 import kotlinx.android.synthetic.main.activity_shows_container.*
 
-class ShowsContainerActivity : AppCompatActivity(), FragmentActionListener {
+class ShowsContainerActivity : BaseActivity(), FragmentActionListener {
 
     val SHOW_SELECTED = "showSelected"
     val CURRENT_INDEX = "currIndex"
