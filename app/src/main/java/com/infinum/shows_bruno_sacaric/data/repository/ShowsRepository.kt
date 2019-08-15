@@ -167,8 +167,14 @@ object ShowsRepository {
         with(showDetailLiveData.value!!) {
             respCode = if(show != null && episodes != null) CODE_OK else CODE_PARTIAL
         }
+        val newLikesCount = if(liked) 1 else -1
+        val show: Show
+        with(showDetailLiveData.value?.show!!){
+            show = Show(id = id, name = name, description = description, imageUrl = imageUrl,
+                likesCount = (likesCount + newLikesCount), type = type)
+        }
         showDetailLiveData.value = ShowDetails(
-            showDetailLiveData.value?.show, showDetailLiveData.value?.episodes,
+            show, showDetailLiveData.value?.episodes,
             liked, respCode
         )
 

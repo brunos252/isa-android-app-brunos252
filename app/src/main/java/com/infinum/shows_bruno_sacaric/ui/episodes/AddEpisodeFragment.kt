@@ -34,7 +34,7 @@ const val MY_READ_PERMISSION = 606
 
 const val SEASON = "SEASON"
 const val EPISODE = "EPISODE"
-const val PHOTO_PATH = "PHOTO_PATH"
+const val MEDIA_PATH = "MEDIA_PATH"
 const val DESC_MIN_LENGTH = 50
 const val SEASON_MIN_VALUE = 1
 const val SEASON_MAX_VALUE = 20
@@ -56,7 +56,7 @@ class AddEpisodeFragment : Fragment() {
 
     var photoDialog: Dialog? = null
     var currentPhotoPath: String = ""
-    lateinit var mediaFile: File
+    var mediaFile: File? = null
 
     private lateinit var viewModel: EpisodesViewModel
 
@@ -80,11 +80,12 @@ class AddEpisodeFragment : Fragment() {
             seasonNumber = savedInstanceState.getInt(SEASON)
             episodeNumber = savedInstanceState.getInt(EPISODE)
             numberPickerText.text = "S %02d, E %02d".format(seasonNumber, episodeNumber)
-            currentPhotoPath = savedInstanceState.getString(PHOTO_PATH)
+            currentPhotoPath = savedInstanceState.getString(MEDIA_PATH)
             if(currentPhotoPath != ""){
                 val imageUri = Uri.parse(currentPhotoPath)
                 imageView.setImageURI(imageUri)
                 addPhotoView.photoAdded()
+                mediaFile = File(currentPhotoPath)
             }
         }
 
@@ -114,7 +115,7 @@ class AddEpisodeFragment : Fragment() {
         }
 
         SaveButton.setOnClickListener {
-            viewModel.addEpisode(mediaFile, titleText.text.toString(),
+            viewModel.addEpisode(mediaFile!!, titleText.text.toString(),
                 descText.text.toString(), seasonNumber.toString(), episodeNumber.toString())
             fragmentManager?.popBackStack()
         }
@@ -123,7 +124,7 @@ class AddEpisodeFragment : Fragment() {
     fun saveButtonCheckState() {
         SaveButton.isEnabled = !titleText.text.isNullOrEmpty()
                 && descText.text.toString().length >= DESC_MIN_LENGTH
-                //&& currentPhotoPath != ""
+                && currentPhotoPath != ""
     }
 
     private fun onCameraClick(){
@@ -222,21 +223,20 @@ class AddEpisodeFragment : Fragment() {
         ).apply {
             currentPhotoPath = absolutePath
         }
-        return mediaFile
+        return mediaFile!!
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         photoDialog?.dismiss()
         if(requestCode == MY_CAMERA_PERMISSION && resultCode == Activity.RESULT_OK){
-            val imageUri = Uri.parse(currentPhotoPath)
+            val imageUri = Uri.parse(mediaFile?.absolutePath)
             imageView.setImageURI(imageUri)
             addPhotoView.photoAdded()
 
         } else if(requestCode == MY_READ_PERMISSION && resultCode == Activity.RESULT_OK){
-            currentPhotoPath = data?.data.toString()
             imageView.setImageURI(data?.data)
-            File(getAbsolutePath(data?.data!!)).copyTo(mediaFile, true)
+            File(getAbsolutePath(data?.data!!)).copyTo(mediaFile!!, true)
             addPhotoView.photoAdded()
         }
         saveButtonCheckState()
@@ -277,7 +277,9 @@ class AddEpisodeFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.putInt(SEASON, seasonNumber)
         outState.putInt(EPISODE, episodeNumber)
-        outState.putString(PHOTO_PATH, currentPhotoPath)
+        if (mediaFile != null) {
+            outState.putString(MEDIA_PATH, mediaFile?.absolutePath)
+        }
     }
 
     fun showNpDialog(){

@@ -79,6 +79,8 @@ class EpisodesFragment : Fragment(),
                     listener?.closeLoadingDialog()
                     toolbar.title = show?.name
                     showDesc.text = show?.description
+                    likeCount.visibility = View.GONE
+                    likeCount.visibility = View.VISIBLE
                     likeCount.text = show?.likesCount.toString()
                     likes = show?.likesCount.toString().toInt()
                     if(!episodes.isNullOrEmpty()) {
@@ -103,7 +105,7 @@ class EpisodesFragment : Fragment(),
 
         dislikeButton.setOnClickListener {
             if(likeStatus == true) {
-                likeCount.text = (likeCount.text.toString().toInt() - 1).toString()
+                listener?.startLoadingDialog()
             }
             changeLikedState(false)
             viewModel.setLikedStatus(false)
@@ -112,7 +114,8 @@ class EpisodesFragment : Fragment(),
 
         likeButton.setOnClickListener {
             if(likeStatus == false || likeStatus == null) {
-                likeCount.text = (likeCount.text.toString().toInt() + 1).toString()
+                listener?.startLoadingDialog()
+                likeCount.text.reversed()
             }
             changeLikedState(true)
             viewModel.setLikedStatus(true)

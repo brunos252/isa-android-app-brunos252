@@ -112,12 +112,6 @@ object LoginRepository {
         loginResponseLiveData.value = LoginResponse(data = null, responseCode = CODE_EMPTY)
     }
 
-    /*fun getToken(appContext: Context) {
-        val sharedPref = appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE)
-        tokenLiveData.value = sharedPref.getString(TOKEN, "")
-        userEmail = sharedPref.getString(EMAIL, "") ?: ""
-    }*/
-
     fun isLoggedIn(appContext: Context) {
         val sharedPref = appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE)
         loggedInLiveData.value = sharedPref.getBoolean(REMEMBER_ME, false)
