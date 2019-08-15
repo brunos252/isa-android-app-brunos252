@@ -15,6 +15,7 @@ import com.infinum.shows_bruno_sacaric.data.repository.ResponseCode.*
 
 const val TOKEN = "TOKEN"
 const val EMAIL = "EMAIL"
+const val REMEMBER_ME = "REMEMBER_ME"
 
 object LoginRepository {
 
@@ -22,6 +23,7 @@ object LoginRepository {
     private val loginResponseLiveData = MutableLiveData<LoginResponse>()
     private val registerResponseLiveData = MutableLiveData<RegisterResponse>()
     private val tokenLiveData = MutableLiveData<String>()
+    private val loggedInLiveData = MutableLiveData<Boolean>()
     lateinit var userEmail : String
 
     fun registerLiveData(): LiveData<RegisterResponse> =
@@ -33,7 +35,10 @@ object LoginRepository {
     fun tokenLiveData(): LiveData<String> =
         tokenLiveData
 
-    fun registerUser(user: User) {
+    fun loggedInLiveData(): LiveData<Boolean> =
+        loggedInLiveData
+
+    fun registerUser(user: User, appContext: Context) {
         apiService?.registerUser(user)?.enqueue(object : Callback<RegisterResponse> {
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
@@ -49,7 +54,7 @@ object LoginRepository {
                                 data = body()?.data,
                                 responseCode = CODE_OK
                             )
-                        loginUser(user, false)
+                        loginUser(user, false, appContext)
                     } else {
                         registerResponseLiveData.value = RegisterResponse(data = null, responseCode = CODE_NO_BODY)
                     }
@@ -58,7 +63,7 @@ object LoginRepository {
         })
     }
 
-    fun loginUser(user: User, rememberMe: Boolean, appContext: Context? = null) {
+    fun loginUser(user: User, rememberMe: Boolean, appContext: Context) {
         apiService?.loginUser(user)?.enqueue(object : Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 loginResponseLiveData.value = LoginResponse(data = null, responseCode = CODE_FAILED)
@@ -73,12 +78,12 @@ object LoginRepository {
                                 data = body()?.data,
                                 responseCode = CODE_OK
                             )
-                        if (rememberMe && appContext != null)
-                            rememberLogin(
-                                body()?.data?.token,
-                                user.email,
-                                appContext
-                        )
+                        rememberLogin(
+                            body()?.data?.token,
+                            user.email,
+                            rememberMe,
+                            appContext)
+
                     } else {
                         loginResponseLiveData.value = LoginResponse(data = null, responseCode = CODE_NO_BODY)
                     }
@@ -87,26 +92,39 @@ object LoginRepository {
         })
     }
 
-    fun rememberLogin(token: String?, email: String?, appContext: Context) {
+    fun rememberLogin(token: String?, email: String?, rememberMe: Boolean, appContext: Context) {
         with(appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE).edit()) {
             putString(TOKEN, token)
             putString(EMAIL, email)
+            putBoolean(REMEMBER_ME, rememberMe)
             apply()
         }
+        tokenLiveData.value = token
     }
 
     fun logoutUser(appContext: Context) {
         with(appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE).edit()) {
             remove(TOKEN)
             remove(EMAIL)
+            remove(REMEMBER_ME)
             apply()
         }
         loginResponseLiveData.value = LoginResponse(data = null, responseCode = CODE_EMPTY)
     }
 
-    fun getToken(appContext: Context) {
+    /*fun getToken(appContext: Context) {
         val sharedPref = appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE)
         tokenLiveData.value = sharedPref.getString(TOKEN, "")
         userEmail = sharedPref.getString(EMAIL, "") ?: ""
+    }*/
+
+    fun isLoggedIn(appContext: Context) {
+        val sharedPref = appContext.getSharedPreferences(TOKEN, Context.MODE_PRIVATE)
+        loggedInLiveData.value = sharedPref.getBoolean(REMEMBER_ME, false)
+        if(loggedInLiveData.value == true) {
+            tokenLiveData.value = sharedPref.getString(TOKEN, "")
+            userEmail = sharedPref.getString(EMAIL, "") ?: ""
+        }
     }
+
 }

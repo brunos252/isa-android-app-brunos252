@@ -17,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
     private var handler = Handler()
     private var stop : Boolean = false
     private lateinit var splashViewModel: SplashViewModel
-    private var token : String = ""
+    private var isLoggedIn : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
             .of(this)
             .get(SplashViewModel::class.java)
         splashViewModel.liveData.observe(this, Observer {
-            token = it
+            isLoggedIn = it
         })
 
         logoImage.doOnLayout {
@@ -62,7 +62,7 @@ class SplashActivity : AppCompatActivity() {
     fun startNextActivity() {
         if(!stop) {
             handler.postDelayed({
-                if (token != "") {
+                if (isLoggedIn) {
                     startActivity(ShowsContainerActivity.newInstance(this))
                 } else {
                     startActivity(LoginActivity.newInstance(this))

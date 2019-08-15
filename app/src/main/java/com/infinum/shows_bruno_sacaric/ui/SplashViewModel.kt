@@ -4,24 +4,24 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.infinum.shows_bruno_sacaric.data.repository.LoginRepository
 
-class SplashViewModel(application: Application) : AndroidViewModel(application), Observer<String> {
+class SplashViewModel(application: Application) : AndroidViewModel(application), Observer<Boolean> {
 
-    private val tokenLiveData = MutableLiveData<String>()
+    private val loggedInLiveData = MutableLiveData<Boolean>()
 
-    val liveData: LiveData<String> get() {
-        return tokenLiveData
+    val liveData: LiveData<Boolean> get() {
+        return loggedInLiveData
     }
 
     init{
-        LoginRepository.tokenLiveData().observeForever(this)
-        LoginRepository.getToken(getApplication())
+        LoginRepository.loggedInLiveData().observeForever(this)
+        LoginRepository.isLoggedIn(getApplication())
     }
 
-    override fun onChanged(token: String?) {
-        tokenLiveData.value = token
+    override fun onChanged(token: Boolean?) {
+        loggedInLiveData.value = token
     }
 
     override fun onCleared() {
-        LoginRepository.tokenLiveData().removeObserver(this)
+        LoginRepository.loggedInLiveData().removeObserver(this)
     }
 }
