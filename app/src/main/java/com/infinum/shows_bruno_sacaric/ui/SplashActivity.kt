@@ -30,9 +30,9 @@ class SplashActivity : AppCompatActivity() {
             isLoggedIn = it
         })
 
-        logoImage.doOnLayout {
-            logoImage.animate()
-                .translationYBy(root.height/2 - logoImage.height - logoImage.translationY)
+        viewGroup.doOnLayout {
+            viewGroup.animate()
+                .translationYBy(-viewGroup.translationY)
                 .setDuration(1200)
                 .setInterpolator(BounceInterpolator())
                 .withEndAction {
